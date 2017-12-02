@@ -1,5 +1,6 @@
 love.graphics.setLineStyle('rough')
 love.graphics.setDefaultFilter('nearest', 'nearest')
+love.mouse.setVisible(false)
 
 math.randomseed(os.time())
 
