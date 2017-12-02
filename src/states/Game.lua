@@ -70,6 +70,10 @@ end
 function Game:update(dt)
     if self.selectedPet then
         self.selectedPet:drag(self.mousePosition:unpack())
+        if self.selectedPet:getLinearVelocity():len2() > 40 then
+            self.dustParticles:setPosition(self.selectedPet:getPosition():unpack())
+            self.dustParticles:emit(1)
+        end
     end
 
     self.world:update(dt)
@@ -124,12 +128,6 @@ end
 function Game:mousemoved(x, y, dx, dy)
     self.mousePosition.x = x
     self.mousePosition.y = y
-    if self.selectedPet then
-        if dx * dx + dy * dy > 40 then
-            self.dustParticles:setPosition(self.selectedPet:getPosition():unpack())
-            self.dustParticles:emit(1)
-        end
-    end
 end
 
 function Game:draw()

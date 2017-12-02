@@ -54,6 +54,7 @@ end
 function Pet:collide(col, other)
     if other:hasTag('apple') then
         other:destroy()
+        self:squish(2)
     end
 end
 

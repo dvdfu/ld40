@@ -25,6 +25,10 @@ function Object:getPosition()
     return Vector(self.body:getPosition())
 end
 
+function Object:getLinearVelocity()
+    return Vector(self.body:getLinearVelocity())
+end
+
 function Object:collide(col, other) end
 
 function Object:update(dt) end

@@ -20,7 +20,7 @@ function PetAmanita:init(world, x, y)
     Pet.init(self, world, x, y)
     self:addTag('amanita')
     self.moveTimer = Timer()
-    self.moveTarget = Vector(x, y)
+    self.moveTarget = nil
     self:relocate()
 end
 
@@ -38,7 +38,7 @@ end
 
 function PetAmanita:update(dt)
     self.moveTimer:update(dt)
-    if not self:isSelected() then
+    if not self:isSelected() and self.moveTarget then
         local delta = (self.moveTarget - self:getPosition()):trimmed(SPEED)
         self.body:setLinearVelocity(delta:unpack())
     end
@@ -47,7 +47,7 @@ end
 
 function PetAmanita:unselect()
     Pet.unselect(self)
-    self.moveTarget = self:getPosition()
+    self.moveTarget = nil
 end
 
 function PetAmanita:relocate()
