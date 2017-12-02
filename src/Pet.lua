@@ -1,31 +1,31 @@
-local Class = require 'modules.hump.class'
 local Animation = require 'src.Animation'
+local Class = require 'modules.hump.class'
+local Object = require 'src.Object'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 
 local Pet = Class.new()
+Pet:include(Object)
 
-local sprite = love.graphics.newImage('assets/pet/amanita.png')
-
-local BODY_RADIUS = 6
 local DAMPING = 0.3
+local SHAPE = love.physics.newCircleShape(6)
+local SPRITE = love.graphics.newImage('assets/pet/amanita.png')
 local SPRITE_OFFSET = Vector(8, 8)
 
 function Pet:init(world, x, y)
+    Object.init(self, world, x, y)
+    self:addTag('pet')
+    self.anim = Animation(SPRITE, 2, 10)
     self.scale = Vector(1, 1)
-    self.anim = Animation(sprite, 2, 10)
+    self.timer = Timer()
     self.faceRight = true
     self.selected = false
-    self.timer = Timer()
-
-    self.body = self:newBody(world, x, y)
 end
 
 function Pet:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
     body:setLinearDamping(DAMPING, DAMPING)
-    local shape = love.physics.newCircleShape(BODY_RADIUS)
-    local fixture = love.physics.newFixture(body, shape)
+    local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData(self)
     return body
 end
@@ -41,8 +41,7 @@ function Pet:update(dt)
 end
 
 function Pet:contains(x, y)
-    local delta = Vector(x - self.body:getX(), y - self.body:getY())
-    return delta:len2() < BODY_RADIUS * BODY_RADIUS
+    return SHAPE:testPoint(self.body:getX(), self.body:getY(), 0, x, y)
 end
 
 function Pet:isSelected()
@@ -61,13 +60,16 @@ function Pet:unselect()
     self.selected = false
 end
 
-function Pet:move(x, y)
+function Pet:drag(x, y)
     self.body:setLinearVelocity(x - self.body:getX(), y - self.body:getY())
 end
 
 function Pet:draw()
     local direction = self.faceRight and 1 or -1
-    self.anim:draw(self.body:getX(), self.body:getY(), 0, self.scale.x * direction, self.scale.y, SPRITE_OFFSET.x, SPRITE_OFFSET.y)
+    self.anim:draw(
+        self.body:getX(), self.body:getY(), 0,
+        self.scale.x * direction, self.scale.y,
+        SPRITE_OFFSET.x, SPRITE_OFFSET.y)
 end
 
 return Pet

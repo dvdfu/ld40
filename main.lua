@@ -4,8 +4,8 @@ love.mouse.setVisible(false)
 
 math.randomseed(os.time())
 
-local Gamestate = require 'modules.hump.gamestate'
 local Game = require 'src.states.Game'
+local Gamestate = require 'modules.hump.gamestate'
 
 local SCALE = 4
 

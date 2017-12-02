@@ -1,15 +1,26 @@
 local Pet = require 'src.Pet'
 local Vector = require 'modules.hump.vector'
 
-local Game = {}
+local CURSOR_SPRITE = love.graphics.newImage('assets/cursor.png')
 
-local cursor = love.graphics.newImage('assets/cursor.png')
+local function beginContact(a, b, coll)
+    local objA = a:getUserData()
+    local objB = b:getUserData()
+    objA:collide(coll, objB)
+    objB:collide(coll, objA)
+end
+local function endContact(a, b, coll) end
+local function preSolve(a, b, coll) end
+local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
+
+local Game = {}
 
 function Game:init()
 end
 
 function Game:enter()
     self.world = love.physics.newWorld()
+    self.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
     self.pets = {}
     self.selectedPet = nil
     for i = 1, 10 do
@@ -47,7 +58,7 @@ function Game:mousemoved(x, y)
     self.mousePosition.x = x
     self.mousePosition.y = y
     if self.selectedPet then
-        self.selectedPet:move(x, y)
+        self.selectedPet:drag(x, y)
     end
 end
 
@@ -55,7 +66,7 @@ function Game:draw()
     for _, pet in pairs(self.pets) do
         pet:draw()
     end
-    love.graphics.draw(cursor, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
+    love.graphics.draw(CURSOR_SPRITE, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
 end
 
 return Game
