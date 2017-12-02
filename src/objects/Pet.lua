@@ -40,8 +40,8 @@ end
 
 function Pet:update(dt)
     local vx, vy = self.body:getLinearVelocity()
-    if vx > 1 then self.faceRight = true end
-    if vx < -1 then self.faceRight = false end
+    if vx > 0.1 then self.faceRight = true end
+    if vx < -0.1 then self.faceRight = false end
 
     local animSpeed = self.selected and 2 or 1
     self.anim:update(dt * animSpeed)
@@ -68,11 +68,7 @@ end
 
 function Pet:select()
     self.selected = true
-    self.scale.x = 1.6
-    self.scale.y = 1 / 1.6
-    self.scaleTimer:clear()
-    self.scaleTimer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
-
+    self:squish(2)
     self.textVisible = true
     self.textTimer:clear()
     self.textTimer:after(100, function() self.textVisible = false end)
@@ -84,6 +80,13 @@ end
 
 function Pet:drag(x, y)
     self.body:setLinearVelocity(x - self.body:getX(), y - self.body:getY())
+end
+
+function Pet:squish(amount)
+    self.scale.x = amount
+    self.scale.y = 1 / amount
+    self.scaleTimer:clear()
+    self.scaleTimer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
 end
 
 function Pet:draw()
