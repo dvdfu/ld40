@@ -2,6 +2,7 @@ local Constants = require 'src.Constants'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin = require 'src.objects.PetChin'
 local PetDasher = require 'src.objects.PetDasher'
+local PetMollusk = require 'src.objects.PetMollusk'
 local Vector = require 'modules.hump.vector'
 local Wall = require 'src.objects.Wall'
 
@@ -26,6 +27,7 @@ local pets = {
     PetAmanita,
     PetChin,
     PetDasher,
+    PetMollusk,
 }
 
 function Game:init()

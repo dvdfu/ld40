@@ -2,19 +2,19 @@ local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Pet = require 'src.objects.Pet'
 
-local PetDasher = Class.new()
-PetDasher:include(Pet)
+local PetMollusk = Class.new()
+PetMollusk:include(Pet)
 
-local DAMPING = 0.1
+local DAMPING = 0.6
 local SHAPE = love.physics.newCircleShape(6)
-local SPRITE = love.graphics.newImage('res/img/pet/dasher.png')
+local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
 
-function PetDasher:init(world, x, y)
+function PetMollusk:init(world, x, y)
     Pet.init(self, world, x, y)
-    self:addTag('dasher')
+    self:addTag('mollusk')
 end
 
-function PetDasher:newBody(world, x, y)
+function PetMollusk:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
     body:setLinearDamping(DAMPING, DAMPING)
     local fixture = love.physics.newFixture(body, SHAPE)
@@ -22,8 +22,8 @@ function PetDasher:newBody(world, x, y)
     return body
 end
 
-function PetDasher:newAnimation()
-    return Animation(SPRITE, 2, 8)
+function PetMollusk:newAnimation()
+    return Animation(SPRITE, 2, 16)
 end
 
-return PetDasher
+return PetMollusk
