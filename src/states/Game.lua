@@ -1,10 +1,11 @@
-local Constants = require 'src.Constants'
+local Vector     = require 'modules.hump.vector'
+local Constants  = require 'src.Constants'
+local Apple      = require 'src.objects.Apple'
 local PetAmanita = require 'src.objects.PetAmanita'
-local PetChin = require 'src.objects.PetChin'
-local PetDasher = require 'src.objects.PetDasher'
+local PetChin    = require 'src.objects.PetChin'
+local PetDasher  = require 'src.objects.PetDasher'
 local PetMollusk = require 'src.objects.PetMollusk'
-local Vector = require 'modules.hump.vector'
-local Wall = require 'src.objects.Wall'
+local Wall       = require 'src.objects.Wall'
 
 local function beginContact(a, b, coll)
     local objA = a:getUserData()
@@ -19,6 +20,7 @@ local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
 local Game = {}
 
 local sprites = {
+    APPLE_PARTICLE = love.graphics.newImage('res/img/apple_particle.png'),
     CURSOR = love.graphics.newImage('res/img/cursor.png'),
     CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
     HEART = love.graphics.newImage('res/img/heart.png'),
@@ -56,10 +58,21 @@ function Game:enter()
     }
 
     local quads = {}
+    for i = 1, 4 do
+        quads[i] = love.graphics.newQuad((i - 1) * 6, 0, 6, 6, 6 * 4, 6)
+    end
+    self.appleParticles = love.graphics.newParticleSystem(sprites.APPLE_PARTICLE)
+    self.appleParticles:setAreaSpread('ellipse', 8, 8)
+    self.appleParticles:setOffset(3, 3)
+    self.appleParticles:setParticleLifetime(20)
+    self.appleParticles:setQuads(quads)
+    self.appleParticles:setSpeed(0.2, 0.8)
+    self.appleParticles:setSpread(math.pi)
+
+    quads = {}
     for i = 1, 6 do
         quads[i] = love.graphics.newQuad((i - 1) * 16, 0, 16, 16, 16 * 6, 16)
     end
-
     self.dustParticles = love.graphics.newParticleSystem(sprites.DUST)
     self.dustParticles:setAreaSpread('ellipse', 4, 4)
     self.dustParticles:setOffset(8, 8)
@@ -77,6 +90,7 @@ function Game:update(dt)
     end
 
     self.world:update(dt)
+    self.appleParticles:update(dt)
     self.dustParticles:update(dt)
     for i, pet in pairs(self.pets) do
         if pet:isDead() then
@@ -128,6 +142,7 @@ function Game:draw()
     for _, pet in pairs(self.pets) do
         pet:draw()
     end
+    love.graphics.draw(self.appleParticles)
 
     for i = 1, self.lives do
         love.graphics.draw(sprites.HEART, 4 + (i - 1) * 11, 4)
