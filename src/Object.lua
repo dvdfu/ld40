@@ -23,6 +23,10 @@ function Object:collide(col, other) end
 
 function Object:update(dt) end
 
+function Object:isDead()
+    return false
+end
+
 function Object:draw() end
 
 return Object

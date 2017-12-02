@@ -3,7 +3,10 @@ local Pet = require 'src.objects.PetChin'
 local Vector = require 'modules.hump.vector'
 local Wall = require 'src.objects.Wall'
 
-local CURSOR_SPRITE = love.graphics.newImage('res/img/cursor.png')
+local sprites = {
+    CURSOR = love.graphics.newImage('res/img/cursor.png'),
+    HEART = love.graphics.newImage('res/img/heart.png'),
+}
 
 local function beginContact(a, b, coll)
     local objA = a:getUserData()
@@ -23,6 +26,9 @@ end
 function Game:enter()
     self.world = love.physics.newWorld()
     self.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
+
+    self.lives = 3
+
     self.pets = {}
     self.selectedPet = nil
     for i = 1, 10 do
@@ -41,8 +47,20 @@ end
 
 function Game:update(dt)
     self.world:update(dt)
-    for _, pet in pairs(self.pets) do
-        pet:update(dt)
+    for i, pet in pairs(self.pets) do
+        if pet:isDead() then
+            self.pets[i] = nil
+            self:loseLife()
+        else
+            pet:update(dt)
+        end
+    end
+end
+
+function Game:loseLife()
+    if self.lives > 0 then
+        self.lives = self.lives - 1
+    else
     end
 end
 
@@ -75,7 +93,11 @@ function Game:draw()
     for _, pet in pairs(self.pets) do
         pet:draw()
     end
-    love.graphics.draw(CURSOR_SPRITE, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
+
+    for i = 1, self.lives do
+        love.graphics.draw(sprites.HEART, 4 + (i - 1) * 11, 4)
+    end
+    love.graphics.draw(sprites.CURSOR, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
 end
 
 return Game

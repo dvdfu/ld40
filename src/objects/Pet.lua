@@ -18,9 +18,12 @@ function Pet:init(world, x, y)
     self:addTag('pet')
     self.anim = self:newAnimation()
     self.scale = Vector(1, 1)
-    self.timer = Timer()
+    self.scaleTimer = Timer()
+    self.textVisible = false
+    self.textTimer = Timer()
     self.faceRight = true
     self.selected = false
+    self.deathTimer = Timer()
 end
 
 function Pet:newBody(world, x, y)
@@ -42,7 +45,17 @@ function Pet:update(dt)
 
     local animSpeed = self.selected and 2 or 1
     self.anim:update(dt * animSpeed)
-    self.timer:update(dt)
+    self.scaleTimer:update(dt)
+    self.textTimer:update(dt)
+    self.deathTimer:update(dt)
+end
+
+function Pet:die()
+    self.body:destroy()
+end
+
+function Pet:isDead()
+    return self.body:isDestroyed()
 end
 
 function Pet:contains(x, y)
@@ -57,8 +70,12 @@ function Pet:select()
     self.selected = true
     self.scale.x = 1.6
     self.scale.y = 1 / 1.6
-    self.timer:clear()
-    self.timer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
+    self.scaleTimer:clear()
+    self.scaleTimer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
+
+    self.textVisible = true
+    self.textTimer:clear()
+    self.textTimer:after(100, function() self.textVisible = false end)
 end
 
 function Pet:unselect()
@@ -76,8 +93,10 @@ function Pet:draw()
         self.scale.x * direction, self.scale.y,
         SPRITE_OFFSET.x, SPRITE_OFFSET.y)
 
-    -- love.graphics.setFont(Constants.FONTS.REDALERT)
-    -- love.graphics.printf('meep', self.body:getX() - 50, self.body:getY() - 20, 100, 'center')
+    if self.textVisible then
+        love.graphics.setFont(Constants.FONTS.REDALERT)
+        love.graphics.printf('meep', self.body:getX() - 50, self.body:getY() - 20 * self.scale.y, 100, 'center')
+    end
 end
 
 return Pet
