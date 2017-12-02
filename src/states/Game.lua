@@ -2,6 +2,7 @@ local Vector     = require 'modules.hump.vector'
 local Constants  = require 'src.Constants'
 local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
+local Flower     = require 'src.objects.Flower'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
 local PetDasher  = require 'src.objects.PetDasher'
@@ -54,6 +55,8 @@ function Game:enter()
         table.insert(self.apples, Apple(self.world, i * 10, i * 20))
     end
 
+    self.flower = Flower(self.world, 100, 100)
+
     self.walls = {
         Wall(self.world, 0, 0, 4, Constants.GAME_HEIGHT),
         Wall(self.world, Constants.GAME_WIDTH - 4, 0, 4, Constants.GAME_HEIGHT),
@@ -75,8 +78,6 @@ function Game:update(dt)
             self.dustParticles:emit(1)
         end
     end
-
-    self.world:update(dt)
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)
     for i, pet in pairs(self.pets) do
@@ -99,6 +100,9 @@ function Game:update(dt)
             apple:update(dt)
         end
     end
+    self.flower:update(dt)
+
+    self.world:update(dt)
 end
 
 function Game:loseLife()
@@ -131,6 +135,7 @@ function Game:mousemoved(x, y, dx, dy)
 end
 
 function Game:draw()
+    self.flower:draw()
     love.graphics.draw(self.dustParticles)
     for _, apple in pairs(self.apples) do
         apple:draw()

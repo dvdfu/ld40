@@ -21,10 +21,6 @@ function Apple:newBody(world, x, y)
     return body
 end
 
-function Apple:update(dt)
-    Object.update(self, dt)
-end
-
 function Apple:draw()
     love.graphics.draw(SPRITE, self.body:getX(), self.body:getY(), 0, 1, 1, RADIUS, RADIUS)
 end
