@@ -51,12 +51,10 @@ function Pet:update(dt)
     self.deathTimer:update(dt)
 end
 
-function Pet:die()
-    self.body:destroy()
-end
-
-function Pet:isDead()
-    return self.body:isDestroyed()
+function Pet:collide(col, other)
+    if other:hasTag('apple') then
+        other:destroy()
+    end
 end
 
 function Pet:contains(x, y)

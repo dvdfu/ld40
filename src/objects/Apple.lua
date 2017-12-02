@@ -10,6 +10,7 @@ local SPRITE = love.graphics.newImage('res/img/apple.png')
 
 function Apple:init(world, x, y)
     Object.init(self, world, x, y)
+    self:addTag('apple')
 end
 
 function Apple:newBody(world, x, y)

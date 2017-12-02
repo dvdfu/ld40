@@ -1,5 +1,6 @@
 local Vector     = require 'modules.hump.vector'
 local Constants  = require 'src.Constants'
+local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
@@ -20,11 +21,9 @@ local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
 local Game = {}
 
 local sprites = {
-    APPLE_PARTICLE = love.graphics.newImage('res/img/apple_particle.png'),
     CURSOR = love.graphics.newImage('res/img/cursor.png'),
     CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
     HEART = love.graphics.newImage('res/img/heart.png'),
-    DUST = love.graphics.newImage('res/img/dust.png'),
 }
 
 local pets = {
@@ -45,9 +44,14 @@ function Game:enter()
 
     self.pets = {}
     self.selectedPet = nil
-    for i = 1, 20 do
+    for i = 1, 10 do
         local pet = pets[math.random(1, #pets)]
         table.insert(self.pets, pet(self.world, i * 20, i * 10))
+    end
+
+    self.apples = {}
+    for i = 1, 10 do
+        table.insert(self.apples, Apple(self.world, i * 10, i * 20))
     end
 
     self.walls = {
@@ -57,29 +61,8 @@ function Game:enter()
         Wall(self.world, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4),
     }
 
-    local quads = {}
-    for i = 1, 4 do
-        quads[i] = love.graphics.newQuad((i - 1) * 6, 0, 6, 6, 6 * 4, 6)
-    end
-    self.appleParticles = love.graphics.newParticleSystem(sprites.APPLE_PARTICLE)
-    self.appleParticles:setAreaSpread('ellipse', 8, 8)
-    self.appleParticles:setOffset(3, 3)
-    self.appleParticles:setParticleLifetime(20)
-    self.appleParticles:setQuads(quads)
-    self.appleParticles:setSpeed(0.2, 0.8)
-    self.appleParticles:setSpread(math.pi)
-
-    quads = {}
-    for i = 1, 6 do
-        quads[i] = love.graphics.newQuad((i - 1) * 16, 0, 16, 16, 16 * 6, 16)
-    end
-    self.dustParticles = love.graphics.newParticleSystem(sprites.DUST)
-    self.dustParticles:setAreaSpread('ellipse', 4, 4)
-    self.dustParticles:setOffset(8, 8)
-    self.dustParticles:setParticleLifetime(10)
-    self.dustParticles:setQuads(quads)
-    self.dustParticles:setSpeed(0, 1)
-    self.dustParticles:setSpread(math.pi)
+    self.appleParticles = Particles.newApple()
+    self.dustParticles = Particles.newDust()
 
     self.mousePosition = Vector(0, 0)
 end
@@ -93,11 +76,23 @@ function Game:update(dt)
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)
     for i, pet in pairs(self.pets) do
-        if pet:isDead() then
+        if pet:isDestroyed() then
+            pet:onDelete()
             self.pets[i] = nil
             self:loseLife()
         else
             pet:update(dt)
+        end
+    end
+    for i, apple in pairs(self.apples) do
+        if apple:isDestroyed() then
+            local x, y = apple:getPosition():unpack()
+            apple:onDelete()
+            self.appleParticles:setPosition(x, y)
+            self.appleParticles:emit(10)
+            self.apples[i] = nil
+        else
+            apple:update(dt)
         end
     end
 end
@@ -139,6 +134,9 @@ end
 
 function Game:draw()
     love.graphics.draw(self.dustParticles)
+    for _, apple in pairs(self.apples) do
+        apple:draw()
+    end
     for _, pet in pairs(self.pets) do
         pet:draw()
     end

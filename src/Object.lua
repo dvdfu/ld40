@@ -6,6 +6,7 @@ local Object = Class.new()
 function Object:init(world, x, y)
     self.body = self:newBody(world, x, y)
     self.tags = {}
+    self.destroyed = false
 end
 
 function Object:addTag(tag)
@@ -28,8 +29,16 @@ function Object:collide(col, other) end
 
 function Object:update(dt) end
 
-function Object:isDead()
-    return false
+function Object:destroy()
+    self.destroyed = true
+end
+
+function Object:onDelete()
+    self.body:destroy()
+end
+
+function Object:isDestroyed()
+    return self.destroyed
 end
 
 function Object:draw() end
