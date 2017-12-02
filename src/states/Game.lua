@@ -1,12 +1,9 @@
 local Constants = require 'src.Constants'
-local Pet = require 'src.objects.PetChin'
+local PetAmanita = require 'src.objects.PetAmanita'
+local PetChin = require 'src.objects.PetChin'
+local PetDasher = require 'src.objects.PetDasher'
 local Vector = require 'modules.hump.vector'
 local Wall = require 'src.objects.Wall'
-
-local sprites = {
-    CURSOR = love.graphics.newImage('res/img/cursor.png'),
-    HEART = love.graphics.newImage('res/img/heart.png'),
-}
 
 local function beginContact(a, b, coll)
     local objA = a:getUserData()
@@ -20,6 +17,17 @@ local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
 
 local Game = {}
 
+local sprites = {
+    CURSOR = love.graphics.newImage('res/img/cursor.png'),
+    HEART = love.graphics.newImage('res/img/heart.png'),
+}
+
+local pets = {
+    PetAmanita,
+    PetChin,
+    PetDasher,
+}
+
 function Game:init()
 end
 
@@ -31,8 +39,9 @@ function Game:enter()
 
     self.pets = {}
     self.selectedPet = nil
-    for i = 1, 10 do
-        table.insert(self.pets, Pet(self.world, i * 10, i * 10))
+    for i = 1, 20 do
+        local pet = pets[math.random(1, #pets)]
+        table.insert(self.pets, pet(self.world, i * 20, i * 10))
     end
 
     self.walls = {
