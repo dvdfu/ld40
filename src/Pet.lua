@@ -1,4 +1,5 @@
 local Animation = require 'src.Animation'
+local Constants = require 'src.Constants'
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
 local Timer = require 'modules.hump.timer'
@@ -9,7 +10,7 @@ Pet:include(Object)
 
 local DAMPING = 0.3
 local SHAPE = love.physics.newCircleShape(6)
-local SPRITE = love.graphics.newImage('assets/pet/amanita.png')
+local SPRITE = love.graphics.newImage('res/img/pet/amanita.png')
 local SPRITE_OFFSET = Vector(8, 8)
 
 function Pet:init(world, x, y)
@@ -50,8 +51,8 @@ end
 
 function Pet:select()
     self.selected = true
-    self.scale.x = 1.5
-    self.scale.y = 0.5
+    self.scale.x = 1.6
+    self.scale.y = 1 / 1.6
     self.timer:clear()
     self.timer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
 end
@@ -70,6 +71,9 @@ function Pet:draw()
         self.body:getX(), self.body:getY(), 0,
         self.scale.x * direction, self.scale.y,
         SPRITE_OFFSET.x, SPRITE_OFFSET.y)
+
+    -- love.graphics.setFont(Constants.FONTS.REDALERT)
+    -- love.graphics.printf('meep', self.body:getX() - 50, self.body:getY() - 20, 100, 'center')
 end
 
 return Pet

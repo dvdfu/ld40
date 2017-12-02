@@ -1,7 +1,7 @@
 local Pet = require 'src.Pet'
 local Vector = require 'modules.hump.vector'
 
-local CURSOR_SPRITE = love.graphics.newImage('assets/cursor.png')
+local CURSOR_SPRITE = love.graphics.newImage('res/img/cursor.png')
 
 local function beginContact(a, b, coll)
     local objA = a:getUserData()
