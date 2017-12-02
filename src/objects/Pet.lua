@@ -8,15 +8,15 @@ local Vector = require 'modules.hump.vector'
 local Pet = Class.new()
 Pet:include(Object)
 
-local DAMPING = 0.3
-local SHAPE = love.physics.newCircleShape(6)
-local SPRITE = love.graphics.newImage('res/img/pet/amanita.png')
+local DAMPING = 1
+local SHAPE = love.physics.newRectangleShape(16, 16)
+local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
 
 function Pet:init(world, x, y)
     Object.init(self, world, x, y)
     self:addTag('pet')
-    self.anim = Animation(SPRITE, 2, 10)
+    self.anim = self:newAnimation()
     self.scale = Vector(1, 1)
     self.timer = Timer()
     self.faceRight = true
@@ -29,6 +29,10 @@ function Pet:newBody(world, x, y)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData(self)
     return body
+end
+
+function Pet:newAnimation()
+    return Animation(SPRITE, 1, 1)
 end
 
 function Pet:update(dt)

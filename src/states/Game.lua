@@ -1,4 +1,4 @@
-local Pet = require 'src.Pet'
+local Pet = require 'src.objects.PetChin'
 local Vector = require 'modules.hump.vector'
 
 local CURSOR_SPRITE = love.graphics.newImage('res/img/cursor.png')
