@@ -1,5 +1,6 @@
 local Vector     = require 'modules.hump.vector'
 local Constants  = require 'src.Constants'
+local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
 local Flower     = require 'src.objects.Flower'
@@ -43,19 +44,31 @@ function Game:enter()
 
     self.lives = 3
 
-    self.pets = {}
+    self.pets = Container(function(pet) self:loseLife() end)
     self.selectedPet = nil
     for i = 1, 10 do
         local pet = pets[math.random(1, #pets)]
-        table.insert(self.pets, pet(self.world, i * 20, i * 10))
+        local x = math.random(8, Constants.GAME_WIDTH - 8)
+        local y = math.random(8, Constants.GAME_HEIGHT - 8)
+        self.pets:add(pet(self.world, x, y))
     end
 
-    self.apples = {}
+    self.apples = Container(function(apple)
+        local x, y = apple:getPosition():unpack()
+        self.appleParticles:setPosition(x, y)
+        self.appleParticles:emit(10)
+    end)
     for i = 1, 10 do
-        table.insert(self.apples, Apple(self.world, i * 10, i * 20))
+        local x = math.random(8, Constants.GAME_WIDTH - 8)
+        local y = math.random(8, Constants.GAME_HEIGHT - 8)
+        self.apples:add(Apple(self.world, x, y))
     end
-
-    self.flower = Flower(self.world, 100, 100)
+    self.flowers = Container()
+    for i = 1, 20 do
+        local x = math.random(8, Constants.GAME_WIDTH - 8)
+        local y = math.random(8, Constants.GAME_HEIGHT - 8)
+        self.flowers:add(Flower(self.world, x, y))
+    end
 
     self.walls = {
         Wall(self.world, 0, 0, 4, Constants.GAME_HEIGHT),
@@ -80,27 +93,9 @@ function Game:update(dt)
     end
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)
-    for i, pet in pairs(self.pets) do
-        if pet:isDestroyed() then
-            pet:onDelete()
-            self.pets[i] = nil
-            self:loseLife()
-        else
-            pet:update(dt)
-        end
-    end
-    for i, apple in pairs(self.apples) do
-        if apple:isDestroyed() then
-            local x, y = apple:getPosition():unpack()
-            apple:onDelete()
-            self.appleParticles:setPosition(x, y)
-            self.appleParticles:emit(10)
-            self.apples[i] = nil
-        else
-            apple:update(dt)
-        end
-    end
-    self.flower:update(dt)
+    self.pets:update(dt)
+    self.apples:update(dt)
+    self.flowers:update(dt)
 
     self.world:update(dt)
 end
@@ -113,13 +108,13 @@ function Game:loseLife()
 end
 
 function Game:mousepressed(x, y)
-    for _, pet in pairs(self.pets) do
+    self.pets:forEach(function(pet)
         if pet:contains(x, y) then
             pet:select()
             self.selectedPet = pet
             return
         end
-    end
+    end)
 end
 
 function Game:mousereleased(x, y)
@@ -135,14 +130,10 @@ function Game:mousemoved(x, y, dx, dy)
 end
 
 function Game:draw()
-    self.flower:draw()
+    self.flowers:draw()
     love.graphics.draw(self.dustParticles)
-    for _, apple in pairs(self.apples) do
-        apple:draw()
-    end
-    for _, pet in pairs(self.pets) do
-        pet:draw()
-    end
+    self.apples:draw()
+    self.pets:draw()
     love.graphics.draw(self.appleParticles)
 
     for i = 1, self.lives do
