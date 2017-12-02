@@ -1,5 +1,7 @@
+local Constants = require 'src.Constants'
 local Pet = require 'src.objects.PetChin'
 local Vector = require 'modules.hump.vector'
+local Wall = require 'src.objects.Wall'
 
 local CURSOR_SPRITE = love.graphics.newImage('res/img/cursor.png')
 
@@ -26,6 +28,13 @@ function Game:enter()
     for i = 1, 10 do
         table.insert(self.pets, Pet(self.world, i * 10, i * 10))
     end
+
+    self.walls = {
+        Wall(self.world, 0, 0, 4, Constants.GAME_HEIGHT),
+        Wall(self.world, Constants.GAME_WIDTH - 4, 0, 4, Constants.GAME_HEIGHT),
+        Wall(self.world, 0, 0, Constants.GAME_WIDTH, 4),
+        Wall(self.world, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4),
+    }
 
     self.mousePosition = Vector(0, 0)
 end
