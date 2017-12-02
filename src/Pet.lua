@@ -7,26 +7,33 @@ local Pet = Class.new()
 
 local sprite = love.graphics.newImage('assets/pet/amanita.png')
 
-function Pet:init(x, y)
-    self.pos = Vector(x, y)
-    self.vel = Vector(0, 0)
-    self.anchor = Vector(x, y)
-    self.offset = Vector(8, 8)
+local BODY_RADIUS = 6
+local DAMPING = 0.3
+local SPRITE_OFFSET = Vector(8, 8)
+
+function Pet:init(world, x, y)
     self.scale = Vector(1, 1)
     self.anim = Animation(sprite, 2, 10)
-    self.bodyRadius = 8
-
-    self.wanderRadius = 24
     self.faceRight = true
     self.selected = false
     self.timer = Timer()
+
+    self.body = self:newBody(world, x, y)
+end
+
+function Pet:newBody(world, x, y)
+    local body = love.physics.newBody(world, x, y, 'dynamic')
+    body:setLinearDamping(DAMPING, DAMPING)
+    local shape = love.physics.newCircleShape(BODY_RADIUS)
+    local fixture = love.physics.newFixture(body, shape)
+    fixture:setUserData(self)
+    return body
 end
 
 function Pet:update(dt)
-    if not self.selected then
-        self.pos = self.pos + self.vel
-        self.vel = self.vel * 0.9
-    end
+    local vx, vy = self.body:getLinearVelocity()
+    if vx > 1 then self.faceRight = true end
+    if vx < -1 then self.faceRight = false end
 
     local animSpeed = self.selected and 2 or 1
     self.anim:update(dt * animSpeed)
@@ -34,8 +41,8 @@ function Pet:update(dt)
 end
 
 function Pet:contains(x, y)
-    local delta = Vector(x, y) - self.pos
-    return delta:len2() < self.bodyRadius * self.bodyRadius
+    local delta = Vector(x - self.body:getX(), y - self.body:getY())
+    return delta:len2() < BODY_RADIUS * BODY_RADIUS
 end
 
 function Pet:isSelected()
@@ -55,21 +62,12 @@ function Pet:unselect()
 end
 
 function Pet:move(x, y)
-    self.vel.x = x - self.pos.x
-    self.vel.y = y - self.pos.y
-    if self.vel.x > 1 then self.faceRight = true end
-    if self.vel.x < -1 then self.faceRight = false end
-    self.pos.x = x
-    self.pos.y = y
-    self.anchor.x = x
-    self.anchor.y = y
+    self.body:setLinearVelocity(x - self.body:getX(), y - self.body:getY())
 end
 
 function Pet:draw()
     local direction = self.faceRight and 1 or -1
-    self.anim:draw(self.pos.x, self.pos.y, 0, self.scale.x * direction, self.scale.y, self.offset.x, self.offset.y)
-
-    -- love.graphics.circle('line', self.anchor.x, self.anchor.y, self.wanderRadius)
+    self.anim:draw(self.body:getX(), self.body:getY(), 0, self.scale.x * direction, self.scale.y, SPRITE_OFFSET.x, SPRITE_OFFSET.y)
 end
 
 return Pet

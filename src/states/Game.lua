@@ -9,16 +9,18 @@ function Game:init()
 end
 
 function Game:enter()
+    self.world = love.physics.newWorld()
     self.pets = {}
     self.selectedPet = nil
     for i = 1, 10 do
-        table.insert(self.pets, Pet(i * 10, i * 10))
+        table.insert(self.pets, Pet(self.world, i * 10, i * 10))
     end
 
     self.mousePosition = Vector(0, 0)
 end
 
 function Game:update(dt)
+    self.world:update(dt)
     for _, pet in pairs(self.pets) do
         pet:update(dt)
     end
