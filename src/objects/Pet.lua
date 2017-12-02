@@ -16,6 +16,7 @@ local SPRITE_OFFSET = Vector(8, 8)
 function Pet:init(world, x, y)
     Object.init(self, world, x, y)
     self:addTag('pet')
+    self.body:setBullet(true)
     self.anim = self:newAnimation()
     self.scale = Vector(1, 1)
     self.scaleTimer = Timer()
@@ -71,7 +72,7 @@ function Pet:select()
     self:squish(2)
     self.textVisible = true
     self.textTimer:clear()
-    self.textTimer:after(100, function() self.textVisible = false end)
+    self.textTimer:after(60, function() self.textVisible = false end)
 end
 
 function Pet:unselect()
@@ -98,7 +99,7 @@ function Pet:draw()
 
     if self.textVisible then
         love.graphics.setFont(Constants.FONTS.REDALERT)
-        love.graphics.printf('meep', self.body:getX() - 50, self.body:getY() - 20 * self.scale.y, 100, 'center')
+        love.graphics.printf('!', self.body:getX() - 50, self.body:getY() - 20 * self.scale.y, 100, 'center')
     end
 end
 

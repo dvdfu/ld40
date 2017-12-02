@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Vector = require 'modules.hump.vector'
 
 local Object = Class.new()
 
@@ -17,6 +18,10 @@ end
 
 function Object:newBody(world, x, y)
     return love.physics.newBody(world, x, y, 'static')
+end
+
+function Object:getPosition()
+    return Vector(self.body:getPosition())
 end
 
 function Object:collide(col, other) end

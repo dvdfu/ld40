@@ -20,6 +20,7 @@ local Game = {}
 
 local sprites = {
     CURSOR = love.graphics.newImage('res/img/cursor.png'),
+    CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
     HEART = love.graphics.newImage('res/img/heart.png'),
     DUST = love.graphics.newImage('res/img/dust.png'),
 }
@@ -71,6 +72,10 @@ function Game:enter()
 end
 
 function Game:update(dt)
+    if self.selectedPet then
+        self.selectedPet:drag(self.mousePosition:unpack())
+    end
+
     self.world:update(dt)
     self.dustParticles:update(dt)
     for i, pet in pairs(self.pets) do
@@ -111,9 +116,8 @@ function Game:mousemoved(x, y, dx, dy)
     self.mousePosition.x = x
     self.mousePosition.y = y
     if self.selectedPet then
-        self.selectedPet:drag(x, y)
         if dx * dx + dy * dy > 40 then
-            self.dustParticles:setPosition(x, y)
+            self.dustParticles:setPosition(self.selectedPet:getPosition():unpack())
             self.dustParticles:emit(1)
         end
     end
@@ -128,7 +132,11 @@ function Game:draw()
     for i = 1, self.lives do
         love.graphics.draw(sprites.HEART, 4 + (i - 1) * 11, 4)
     end
-    love.graphics.draw(sprites.CURSOR, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
+    if self.selectedPet then
+        love.graphics.draw(sprites.CURSOR_DRAG, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
+    else
+        love.graphics.draw(sprites.CURSOR, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
+    end
 end
 
 return Game

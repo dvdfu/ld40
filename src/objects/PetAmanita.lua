@@ -8,8 +8,8 @@ local PetAmanita = Class.new()
 PetAmanita:include(Pet)
 
 local DAMPING = 0.3
-local MOVE_DISTANCE_MIN = 4
-local MOVE_DISTANCE_MAX = 16
+local MOVE_DISTANCE_MIN = 8
+local MOVE_DISTANCE_MAX = 24
 local MOVE_INTERVAL_MIN = 30
 local MOVE_INTERVAL_MAX = 150
 local SHAPE = love.physics.newCircleShape(6)
@@ -39,8 +39,7 @@ end
 function PetAmanita:update(dt)
     self.moveTimer:update(dt)
     if not self:isSelected() then
-        local pos = Vector(self.body:getPosition())
-        local delta = (self.moveTarget - pos):trimmed(SPEED)
+        local delta = (self.moveTarget - self:getPosition()):trimmed(SPEED)
         self.body:setLinearVelocity(delta:unpack())
     end
     Pet.update(self, dt)
@@ -48,7 +47,7 @@ end
 
 function PetAmanita:unselect()
     Pet.unselect(self)
-    self.moveTarget = Vector(self.body:getPosition())
+    self.moveTarget = self:getPosition()
 end
 
 function PetAmanita:relocate()
@@ -56,7 +55,7 @@ function PetAmanita:relocate()
         local angle = math.random(0, math.pi * 2)
         local radius = math.random(MOVE_DISTANCE_MIN, MOVE_DISTANCE_MAX)
         local delta = Vector(math.cos(angle), math.sin(angle)) * radius
-        self.moveTarget = Vector(self.body:getPosition()) + delta
+        self.moveTarget = self:getPosition() + delta
         self:squish(1.3)
     end
 

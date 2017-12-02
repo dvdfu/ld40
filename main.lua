@@ -8,8 +8,6 @@ local Constants = require 'src.Constants'
 local Game = require 'src.states.Game'
 local Gamestate = require 'modules.hump.gamestate'
 
-local SCALE = 4
-
 function love.load()
     Gamestate.switch(Game)
 end
@@ -33,5 +31,6 @@ function love.mousereleased(x, y)
 end
 
 function love.mousemoved(x, y, dx, dy)
-    Gamestate.mousemoved(x / SCALE, y / SCALE, dx / SCALE, dy / SCALE)
+    local scale = Constants.SCREEN_SCALE
+    Gamestate.mousemoved(x / scale, y / scale, dx / scale, dy / scale)
 end
