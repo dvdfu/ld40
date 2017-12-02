@@ -32,6 +32,6 @@ function love.mousereleased(x, y)
     Gamestate.mousereleased(x / Constants.SCREEN_SCALE, y / Constants.SCREEN_SCALE)
 end
 
-function love.mousemoved(x, y)
-    Gamestate.mousemoved(x / SCALE, y / SCALE)
+function love.mousemoved(x, y, dx, dy)
+    Gamestate.mousemoved(x / SCALE, y / SCALE, dx / SCALE, dy / SCALE)
 end

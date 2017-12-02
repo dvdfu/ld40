@@ -21,6 +21,7 @@ local Game = {}
 local sprites = {
     CURSOR = love.graphics.newImage('res/img/cursor.png'),
     HEART = love.graphics.newImage('res/img/heart.png'),
+    DUST = love.graphics.newImage('res/img/dust.png'),
 }
 
 local pets = {
@@ -53,11 +54,25 @@ function Game:enter()
         Wall(self.world, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4),
     }
 
+    local quads = {}
+    for i = 1, 6 do
+        quads[i] = love.graphics.newQuad((i - 1) * 16, 0, 16, 16, 16 * 6, 16)
+    end
+
+    self.dustParticles = love.graphics.newParticleSystem(sprites.DUST)
+    self.dustParticles:setAreaSpread('ellipse', 4, 4)
+    self.dustParticles:setOffset(8, 8)
+    self.dustParticles:setParticleLifetime(10)
+    self.dustParticles:setQuads(quads)
+    self.dustParticles:setSpeed(0, 1)
+    self.dustParticles:setSpread(math.pi)
+
     self.mousePosition = Vector(0, 0)
 end
 
 function Game:update(dt)
     self.world:update(dt)
+    self.dustParticles:update(dt)
     for i, pet in pairs(self.pets) do
         if pet:isDead() then
             self.pets[i] = nil
@@ -92,15 +107,20 @@ function Game:mousereleased(x, y)
     end
 end
 
-function Game:mousemoved(x, y)
+function Game:mousemoved(x, y, dx, dy)
     self.mousePosition.x = x
     self.mousePosition.y = y
     if self.selectedPet then
         self.selectedPet:drag(x, y)
+        if dx * dx + dy * dy > 40 then
+            self.dustParticles:setPosition(x, y)
+            self.dustParticles:emit(1)
+        end
     end
 end
 
 function Game:draw()
+    love.graphics.draw(self.dustParticles)
     for _, pet in pairs(self.pets) do
         pet:draw()
     end
