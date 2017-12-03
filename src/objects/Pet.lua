@@ -56,6 +56,8 @@ function Pet:collide(col, other)
     elseif other:hasTag('flower') then
         local vx, vy = self.body:getLinearVelocity()
         other:jostle(vx)
+    elseif other:hasTag('lava') then
+        self:destroy()
     end
 end
 
@@ -93,7 +95,7 @@ function Pet:draw()
 end
 
 function Pet:getDrawOrder()
-    return 2
+    return 3
 end
 
 return Pet

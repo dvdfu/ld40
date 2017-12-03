@@ -1,4 +1,4 @@
-local SCALE = 2
+local SCALE = 3
 
 return {
     SCREEN_SCALE = SCALE,

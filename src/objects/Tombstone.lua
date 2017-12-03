@@ -41,4 +41,8 @@ function Tombstone:draw()
     love.graphics.draw(SPRITE, x, y, 0, self.xScale, self.yScale, 8, 16)
 end
 
+function Tombstone:getDrawOrder()
+    return 1
+end
+
 return Tombstone

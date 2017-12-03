@@ -4,13 +4,13 @@ local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
 local Flower     = require 'src.objects.Flower'
+local Lava       = require 'src.objects.Lava'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
 local PetDasher  = require 'src.objects.PetDasher'
 local PetDragon  = require 'src.objects.PetDragon'
 local PetMollusk = require 'src.objects.PetMollusk'
 local Tombstone  = require 'src.objects.Tombstone'
-local Wall       = require 'src.objects.Wall'
 
 local Game = {}
 
@@ -51,29 +51,29 @@ function Game:enter()
         end
     end)
 
-    for i = 1, 20 do
+    for i = 1, 10 do
         local pet = pets[math.random(1, #pets)]
-        local x = math.random(8, Constants.GAME_WIDTH - 8)
-        local y = math.random(8, Constants.GAME_HEIGHT - 8)
+        local x = math.random(32, Constants.GAME_WIDTH - 32)
+        local y = math.random(32, Constants.GAME_HEIGHT - 32)
         pet(self.container, x, y)
     end
 
     for i = 1, 10 do
-        local x = math.random(8, Constants.GAME_WIDTH - 8)
-        local y = math.random(8, Constants.GAME_HEIGHT - 8)
+        local x = math.random(32, Constants.GAME_WIDTH - 32)
+        local y = math.random(32, Constants.GAME_HEIGHT - 32)
         Apple(self.container, x, y)
     end
 
     for i = 1, 20 do
-        local x = math.random(8, Constants.GAME_WIDTH - 8)
-        local y = math.random(8, Constants.GAME_HEIGHT - 8)
+        local x = math.random(32, Constants.GAME_WIDTH - 32)
+        local y = math.random(32, Constants.GAME_HEIGHT - 32)
         Flower(self.container, x, y)
     end
 
-    Wall(self.container, 0, 0, 4, Constants.GAME_HEIGHT)
-    Wall(self.container, Constants.GAME_WIDTH - 4, 0, 4, Constants.GAME_HEIGHT)
-    Wall(self.container, 0, 0, Constants.GAME_WIDTH, 4)
-    Wall(self.container, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4)
+    Lava(self.container, 0, 0, 16, Constants.GAME_HEIGHT) -- left
+    Lava(self.container, Constants.GAME_WIDTH - 16, 0, 16, Constants.GAME_HEIGHT) -- right
+    Lava(self.container, 16, 0, Constants.GAME_WIDTH - 32, 16) -- top
+    Lava(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
 
     self.selection = nil
 

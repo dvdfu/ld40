@@ -52,4 +52,8 @@ function Flower:draw()
         0, 1, 1, 8, 16, self.shear)
 end
 
+function Flower:getDrawOrder()
+    return 1
+end
+
 return Flower

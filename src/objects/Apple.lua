@@ -23,12 +23,18 @@ function Apple:newBody(world, x, y)
     return body
 end
 
+function Apple:collide(col, other)
+    if other:hasTag('lava') then
+        self:destroy()
+    end
+end
+
 function Apple:draw()
     love.graphics.draw(SPRITE, self.body:getX(), self.body:getY(), 0, 1, 1, RADIUS, RADIUS)
 end
 
 function Apple:getDrawOrder()
-    return 1
+    return 2
 end
 
 return Apple
