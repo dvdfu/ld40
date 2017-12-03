@@ -61,7 +61,9 @@ function Pet:update(dt)
     self.tearsTimer:update(dt)
     self.tears:update(dt)
     if self.timeLeft > 1 then
-        self.timeLeft = self.timeLeft - 1
+        if not self:hasTag('lumpy') then
+            self.timeLeft = self.timeLeft - 1
+        end
         if self.timeLeft == TIME_CRY then self:onCry() end
     else
         self:destroy()
@@ -70,10 +72,10 @@ end
 
 function Pet:collide(col, other, fixture)
     if fixture:getUserData() == 'body' then
-        if other:hasTag('fireball') and not self:hasTag('dragon') then
+        if other:hasTag('fireball') and not self:hasTag('dragon') and not self:hasTag('lumpy') then
             other:destroy()
             self:destroy()
-        elseif other:hasTag('ferro') then
+        elseif other:hasTag('ferro') and not self:hasTag('lumpy') then
             self:destroy()
         elseif other:hasTag('grass') then
             local vx, vy = self.body:getLinearVelocity()
@@ -100,11 +102,12 @@ end
 
 function Pet:onCry() end
 
-function Pet:onHappy() end
+function Pet:onHappy()
+    self:squish(1.4)
+end
 
 function Pet:resetTime()
     self.timeLeft = TIME_RESET
-    self:squish(1.4)
     self:onHappy()
 end
 

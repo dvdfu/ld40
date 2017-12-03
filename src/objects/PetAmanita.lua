@@ -50,6 +50,7 @@ function PetAmanita:onCry()
 end
 
 function PetAmanita:onHappy()
+    self:squish(1.4)
     self.anim = self.animHappy
     self.happyTimer:clear()
     self.happyTimer:after(60, function() self.anim = self.animIdle end)
