@@ -9,6 +9,7 @@ local PetChin    = require 'src.objects.PetChin'
 local PetDasher  = require 'src.objects.PetDasher'
 local PetDragon  = require 'src.objects.PetDragon'
 local PetMollusk = require 'src.objects.PetMollusk'
+local Tombstone  = require 'src.objects.Tombstone'
 local Wall       = require 'src.objects.Wall'
 
 local Game = {}
@@ -31,16 +32,22 @@ function Game:enter()
     self.lives = 3
 
     self.container = Container(function(object)
+        local x, y = object:getPosition():unpack()
         if object:hasTag('apple') then
-            local x, y = object:getPosition():unpack()
             self.appleParticles:setPosition(x, y)
             self.appleParticles:emit(10)
         elseif object:hasTag('pet') then
+            self.dustParticles:setPosition(x, y)
+            self.dustParticles:emit(1)
+            Tombstone(self.container, x, y)
             self:loseLife()
+        elseif object:hasTag('fireball') then
+            self.dustParticles:setPosition(x, y)
+            self.dustParticles:emit(1)
         end
     end)
 
-    for i = 1, 10 do
+    for i = 1, 20 do
         local pet = pets[math.random(1, #pets)]
         local x = math.random(8, Constants.GAME_WIDTH - 8)
         local y = math.random(8, Constants.GAME_HEIGHT - 8)
@@ -75,7 +82,7 @@ end
 function Game:update(dt)
     if self.selectedPet then
         self.selectedPet:drag(self.mousePosition:unpack())
-        if self.selectedPet:getLinearVelocity():len2() > 40 then
+        if self.selectedPet:getLinearVelocity():len2() > 100 then
             self.dustParticles:setPosition(self.selectedPet:getPosition():unpack())
             self.dustParticles:emit(1)
         end

@@ -1,16 +1,16 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
-local Pet = require 'src.objects.Pet'
+local WalkablePet = require 'src.objects.WalkablePet'
 
 local PetDasher = Class.new()
-PetDasher:include(Pet)
+PetDasher:include(WalkablePet)
 
 local DAMPING = 0.1
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/dasher.png')
 
 function PetDasher:init(container, x, y)
-    Pet.init(self, container, x, y)
+    WalkablePet.init(self, container, x, y)
     self:addTag('dasher')
 end
 

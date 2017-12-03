@@ -8,6 +8,7 @@ Wall:include(Object)
 function Wall:init(container, x, y, w, h)
     self.size = Vector(w, h)
     Object.init(self, container, x + w / 2, y + h / 2)
+    self:addTag('solid')
 end
 
 function Wall:newBody(world, x, y)
