@@ -1,11 +1,11 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
-local Object = require 'src.Object'
+local Selectable = require 'src.objects.Selectable'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 
 local Pet = Class.new()
-Pet:include(Object)
+Pet:include(Selectable)
 
 local DAMPING = 1
 local EXCLAMATION_SPRITE = love.graphics.newImage('res/img/exclamation.png')
@@ -14,16 +14,14 @@ local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
 
 function Pet:init(container, x, y)
-    Object.init(self, container, x, y)
+    Selectable.init(self, container, x, y)
     self:addTag('pet')
-    self.body:setBullet(true)
     self.anim = self:newAnimation()
     self.scale = Vector(1, 1)
     self.scaleTimer = Timer()
     self.iconVisible = false
     self.iconTimer = Timer()
     self.faceRight = true
-    self.selected = false
     self.deathTimer = Timer()
 end
 
@@ -65,24 +63,12 @@ function Pet:contains(x, y)
     return SHAPE:testPoint(self.body:getX(), self.body:getY(), 0, x, y)
 end
 
-function Pet:isSelected()
-    return self.selected
-end
-
 function Pet:select()
-    self.selected = true
+    Selectable.select(self)
     self:squish(2)
     self.iconVisible = true
     self.iconTimer:clear()
     self.iconTimer:after(60, function() self.iconVisible = false end)
-end
-
-function Pet:unselect()
-    self.selected = false
-end
-
-function Pet:drag(x, y)
-    self.body:setLinearVelocity(x - self.body:getX(), y - self.body:getY())
 end
 
 function Pet:squish(amount)

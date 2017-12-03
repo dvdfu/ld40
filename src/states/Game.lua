@@ -33,6 +33,10 @@ function Game:enter()
 
     self.container = Container(function(object)
         local x, y = object:getPosition():unpack()
+        if object == self.selection then
+            object:unselect()
+            self.selection = nil
+        end
         if object:hasTag('apple') then
             self.appleParticles:setPosition(x, y)
             self.appleParticles:emit(10)
@@ -71,7 +75,7 @@ function Game:enter()
     Wall(self.container, 0, 0, Constants.GAME_WIDTH, 4)
     Wall(self.container, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4)
 
-    self.selectedPet = nil
+    self.selection = nil
 
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
@@ -80,10 +84,10 @@ function Game:enter()
 end
 
 function Game:update(dt)
-    if self.selectedPet then
-        self.selectedPet:drag(self.mousePosition:unpack())
-        if self.selectedPet:getLinearVelocity():len2() > 100 then
-            self.dustParticles:setPosition(self.selectedPet:getPosition():unpack())
+    if self.selection then
+        self.selection:drag(self.mousePosition:unpack())
+        if self.selection:getLinearVelocity():len2() > 100 then
+            self.dustParticles:setPosition(self.selection:getPosition():unpack())
             self.dustParticles:emit(1)
         end
     end
@@ -101,18 +105,18 @@ end
 
 function Game:mousepressed(x, y)
     self.container:forEach(function(object)
-        if object:hasTag('pet') and object:contains(x, y) then
+        if object:hasTag('selectable') and object:contains(x, y) then
             object:select()
-            self.selectedPet = object
+            self.selection = object
             return
         end
     end)
 end
 
 function Game:mousereleased(x, y)
-    if self.selectedPet then
-        self.selectedPet:unselect()
-        self.selectedPet = nil
+    if self.selection then
+        self.selection:unselect()
+        self.selection = nil
     end
 end
 
@@ -129,7 +133,7 @@ function Game:draw()
     for i = 1, self.lives do
         love.graphics.draw(sprites.HEART, 4 + (i - 1) * 11, 4)
     end
-    if self.selectedPet then
+    if self.selection then
         love.graphics.draw(sprites.CURSOR_DRAG, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
     else
         love.graphics.draw(sprites.CURSOR, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
