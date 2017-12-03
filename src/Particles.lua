@@ -3,6 +3,7 @@ local Particles = {}
 local sprites = {
     APPLE = love.graphics.newImage('res/img/particles/apple.png'),
     DUST = love.graphics.newImage('res/img/particles/dust.png'),
+    TEARS = love.graphics.newImage('res/img/particles/tears.png'),
 }
 
 local function getQuads(n, w, h)
@@ -32,6 +33,19 @@ function Particles.newDust()
     ps:setQuads(getQuads(6, 16, 16))
     ps:setSpeed(0, 1)
     ps:setSpread(math.pi)
+    return ps
+end
+
+function Particles.newTears()
+    local ps = love.graphics.newParticleSystem(sprites.TEARS)
+    ps:setAreaSpread('ellipse', 8, 0)
+    ps:setDirection(-math.pi / 2)
+    ps:setLinearAcceleration(0, 0.1)
+    ps:setOffset(2, 2)
+    ps:setParticleLifetime(10, 20)
+    ps:setQuads(getQuads(2, 4, 4))
+    ps:setSpeed(1, 2)
+    ps:setSpread(math.pi / 4)
     return ps
 end
 

@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Selectable = require 'src.objects.Selectable'
+local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 
@@ -22,7 +23,8 @@ function Pet:init(container, x, y)
     self.iconVisible = false
     self.iconTimer = Timer()
     self.faceRight = true
-    self.deathTimer = Timer()
+    self.moneyTimer = Timer()
+    self.moneyTimer:every(180, function() Signal.emit('payout') end)
 end
 
 function Pet:newBody(world, x, y)
@@ -46,7 +48,7 @@ function Pet:update(dt)
     self.anim:update(dt * animSpeed)
     self.scaleTimer:update(dt)
     self.iconTimer:update(dt)
-    self.deathTimer:update(dt)
+    self.moneyTimer:update(dt)
 end
 
 function Pet:collide(col, other)
