@@ -40,9 +40,6 @@ function Fireball:collide(col, other, fixture)
         self:destroy()
     elseif other:hasTag('apple') then
         other:destroy()
-    elseif other:hasTag('pet') and fixture:getUserData() == 'body' and not other:hasTag('dragon') then
-        other:destroy()
-        self:destroy()
     end
 end
 
