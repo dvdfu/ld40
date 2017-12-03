@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
+local Vector = require 'modules.hump.vector'
 
 local Selectable = Class.new()
 Selectable:include(Object)
@@ -30,7 +31,13 @@ function Selectable:unselect()
 end
 
 function Selectable:drag(x, y)
-    self.body:setLinearVelocity(x - self.body:getX(), y - self.body:getY())
+    local delta = Vector(x, y) - self:getPosition()
+    delta:trimInplace(self:getMaxDragSpeed())
+    self.body:setLinearVelocity(delta:unpack())
+end
+
+function Selectable:getMaxDragSpeed()
+    return 10
 end
 
 return Selectable

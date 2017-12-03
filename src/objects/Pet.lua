@@ -9,7 +9,6 @@ local Pet = Class.new()
 Pet:include(Selectable)
 
 local DAMPING = 1
-local EXCLAMATION_SPRITE = love.graphics.newImage('res/img/exclamation.png')
 local SHAPE = love.physics.newRectangleShape(16, 16)
 local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
@@ -20,8 +19,6 @@ function Pet:init(container, x, y)
     self.anim = self:newAnimation()
     self.scale = Vector(1, 1)
     self.scaleTimer = Timer()
-    self.iconVisible = false
-    self.iconTimer = Timer()
     self.faceRight = true
     self.moneyTimer = Timer()
     self.moneyTimer:every(180, function() Signal.emit('payout') end)
@@ -48,7 +45,6 @@ function Pet:update(dt)
     local animSpeed = self.selected and 2 or 1
     self.anim:update(dt * animSpeed)
     self.scaleTimer:update(dt)
-    self.iconTimer:update(dt)
     self.moneyTimer:update(dt)
 end
 
@@ -74,9 +70,6 @@ end
 function Pet:select()
     Selectable.select(self)
     self:squish(2)
-    self.iconVisible = true
-    self.iconTimer:clear()
-    self.iconTimer:after(60, function() self.iconVisible = false end)
 end
 
 function Pet:squish(amount)
@@ -92,12 +85,6 @@ function Pet:draw()
         self.body:getX(), self.body:getY(), 0,
         self.scale.x * direction, self.scale.y,
         SPRITE_OFFSET.x, SPRITE_OFFSET.y)
-
-    if self.iconVisible then
-        love.graphics.draw(EXCLAMATION_SPRITE,
-            self.body:getX(), self.body:getY() - 16 * self.scale.y, 0,
-            1, 1, 8, 8)
-    end
 end
 
 function Pet:getDrawOrder()

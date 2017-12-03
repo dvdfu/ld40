@@ -33,10 +33,9 @@ function Grass:update(dt)
 end
 
 function Grass:jostle(vx)
-    if math.abs(self.shear) < 0.1 then
-        self.shear = vx / 25
-        if self.shear > 3 then self.shear = 3
-        elseif self.shear < -3 then self.shear = -3 end
+    if math.abs(self.shear) < 0.01 then
+        if vx > 0 then self.shear = math.min(1, vx) end
+        if vx < 0 then self.shear = math.max(-1, vx) end
         self.timer:clear()
         self.timer:tween(60, self, {shear = 0}, 'out-elastic')
     end

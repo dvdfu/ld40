@@ -90,10 +90,10 @@ end
 function Game:update(dt)
     if self.selection then
         self.selection:drag(self.mousePosition:unpack())
-        if self.selection:getLinearVelocity():len2() > 100 then
-            self.dustParticles:setPosition(self.selection:getPosition():unpack())
-            self.dustParticles:emit(1)
-        end
+        -- if self.selection:getLinearVelocity():len2() > 100 then
+        --     self.dustParticles:setPosition(self.selection:getPosition():unpack())
+        --     self.dustParticles:emit(1)
+        -- end
     end
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)

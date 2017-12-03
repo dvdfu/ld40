@@ -34,7 +34,9 @@ end
 
 function PetDragon:update(dt)
     Pet.update(self, dt)
-    self.timer:update(dt)
+    if not self:isSelected() then
+        self.timer:update(dt)
+    end
 end
 
 function PetDragon:breathFire()
