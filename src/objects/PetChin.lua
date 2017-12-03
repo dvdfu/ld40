@@ -27,6 +27,7 @@ function PetChin:init(container, x, y)
     self.tongueTimer = Timer()
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animEat = Animation(sprites.eat, 2, 10)
+    self.anim = self.animIdle
 end
 
 function PetChin:newBody(world, x, y)

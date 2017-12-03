@@ -11,7 +11,6 @@ local SPRITE = love.graphics.newImage('res/img/lava.png')
 function Lava:init(container, x, y, w, h)
     self.size = Vector(w, h)
     Object.init(self, container, x + w / 2, y + h / 2)
-    self:addTag('lava')
     self.anim = Animation(SPRITE, 4, 10)
 end
 
@@ -20,7 +19,6 @@ function Lava:newBody(world, x, y)
     body:setUserData(self)
     local shape = love.physics.newRectangleShape(self.size:unpack())
     local fixture = love.physics.newFixture(body, shape)
-    fixture:setSensor(true)
     return body
 end
 

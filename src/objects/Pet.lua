@@ -63,8 +63,6 @@ function Pet:collide(col, other, fixture)
         elseif other:hasTag('grass') then
             local vx, vy = self.body:getLinearVelocity()
             other:jostle(vx)
-        elseif other:hasTag('lava') then
-            self:destroy()
         end
     end
 end

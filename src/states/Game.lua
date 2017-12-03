@@ -62,17 +62,12 @@ function Game:enter()
         end
     end)
 
-    for i = 1, 10 do
-        local pet = pets[math.random(1, #pets)]
-        local x = math.random(32, Constants.GAME_WIDTH - 32)
-        local y = math.random(32, Constants.GAME_HEIGHT - 32)
-        pet(self.container, x, y)
-    end
+    self.appleParticles = Particles.newApple()
+    self.dustParticles = Particles.newDust()
 
     for i = 1, 10 do
-        local x = math.random(32, Constants.GAME_WIDTH - 32)
-        local y = math.random(32, Constants.GAME_HEIGHT - 32)
-        Apple(self.container, x, y)
+        self:spawnPet()
+        self:spawnApple()
     end
 
     for i = 1, 50 do
@@ -85,10 +80,6 @@ function Game:enter()
     Lava(self.container, Constants.GAME_WIDTH - 16, 0, 16, Constants.GAME_HEIGHT) -- right
     Lava(self.container, 16, 0, Constants.GAME_WIDTH - 32, 16) -- top
     Lava(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
-
-
-    self.appleParticles = Particles.newApple()
-    self.dustParticles = Particles.newDust()
 
     self.selection = nil
     self.mousePosition = Vector(0, 0)
@@ -108,6 +99,23 @@ function Game:update(dt)
     self.dustParticles:update(dt)
     self.container:update(dt)
     self.moneyOffsetTimer:update(dt)
+end
+
+function Game:spawnPet()
+    local x = math.random(32, Constants.GAME_WIDTH - 32)
+    local y = math.random(32, Constants.GAME_HEIGHT - 32)
+    local pet = pets[math.random(1, #pets)]
+    pet(self.container, x, y)
+    self.dustParticles:setPosition(x, y)
+    self.dustParticles:emit(1)
+end
+
+function Game:spawnApple()
+    local x = math.random(32, Constants.GAME_WIDTH - 32)
+    local y = math.random(32, Constants.GAME_HEIGHT - 32)
+    Apple(self.container, x, y)
+    self.dustParticles:setPosition(x, y)
+    self.dustParticles:emit(1)
 end
 
 function Game:onLoseLife()
