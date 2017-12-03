@@ -24,4 +24,16 @@ function PetDasher:newBody(world, x, y)
     return body
 end
 
+function PetDasher:getWanderSpeed()
+    return 1
+end
+
+function PetDasher:getWanderDistance()
+    return math.random(32, 80)
+end
+
+function PetDasher:getWanderDelay()
+    return math.random(200, 300)
+end
+
 return PetDasher

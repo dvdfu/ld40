@@ -9,7 +9,7 @@ PetLumpy:include(WanderingPet)
 
 local DAMPING = 0.1
 local SHAPE = love.physics.newCircleShape(6)
-local SENSOR_SHAPE = love.physics.newCircleShape(32)
+local SENSOR_SHAPE = love.physics.newCircleShape(20)
 
 local sprites = {
     idle = love.graphics.newImage('res/img/pet/lumpy.png'),
@@ -24,7 +24,7 @@ function PetLumpy:init(container, x, y)
     self.scared = false
     self.scaredTimer = Timer()
     self.appleTimer = Timer()
-    self.appleTimer:every(300, function()
+    self.appleTimer:every(450, function()
         local x, y = self.body:getPosition()
         Apple(self.container, x, y + 8)
     end)
@@ -55,6 +55,18 @@ function PetLumpy:collide(col, other, fixture)
         other:hasTag('tombstone') and not self.scared then
         self:scareSelf()
     end
+end
+
+function PetLumpy:getWanderSpeed()
+    return 0.4
+end
+
+function PetLumpy:getWanderDistance()
+    return 32
+end
+
+function PetLumpy:getWanderDelay()
+    return math.random(90, 150)
 end
 
 function PetLumpy:scareSelf()

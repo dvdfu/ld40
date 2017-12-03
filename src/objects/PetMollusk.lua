@@ -35,7 +35,7 @@ function PetMollusk:collide(col, other, fixture)
 end
 
 function PetMollusk:getMaxDragSpeed()
-    return 2
+    return 1
 end
 
 return PetMollusk

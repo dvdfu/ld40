@@ -32,4 +32,16 @@ function PetFerro:collide(col, other, fixture)
     end
 end
 
+function PetFerro:getWanderSpeed()
+    return 1
+end
+
+function PetFerro:getWanderDistance()
+    return 80
+end
+
+function PetFerro:getWanderDelay()
+    return math.random(200, 240)
+end
+
 return PetFerro

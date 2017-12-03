@@ -14,7 +14,7 @@ local SHAPE = love.physics.newRectangleShape(16, 16)
 local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
 local TIME_RESET = 60 * 18
-local TIME_CRY = 60 * 12
+local TIME_CRY = 60 * 8
 local TIME_BAWL = 60 * 4
 
 function Pet:init(container, x, y)

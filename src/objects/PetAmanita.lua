@@ -56,4 +56,16 @@ function PetAmanita:onHappy()
     self.happyTimer:after(60, function() self.anim = self.animIdle end)
 end
 
+function PetAmanita:getWanderSpeed()
+    return 0.5
+end
+
+function PetAmanita:getWanderDistance()
+    return math.random(4, 20)
+end
+
+function PetAmanita:getWanderDelay()
+    return math.random(60, 120)
+end
+
 return PetAmanita
