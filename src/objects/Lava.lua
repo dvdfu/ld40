@@ -6,7 +6,7 @@ local Timer = require 'modules.hump.timer'
 local Lava = Class.new()
 Lava:include(Object)
 
-local LIFETIME = 90
+local LIFETIME = 150
 local RADIUS = 4
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPEED = 1

@@ -67,7 +67,7 @@ function PetDasher:getWanderSpeed()
 end
 
 function PetDasher:getWanderDistance()
-    return math.random(32, 80)
+    return math.random(64, 128)
 end
 
 function PetDasher:getWanderDelay()

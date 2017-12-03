@@ -24,7 +24,7 @@ function PetLumpy:init(container, x, y)
     self.scared = false
     self.scaredTimer = Timer()
     self.appleTimer = Timer()
-    self.appleTimer:every(450, function()
+    self.appleTimer:every(360, function()
         local x, y = self.body:getPosition()
         Apple(self.container, x, y + 8)
     end)
@@ -84,7 +84,7 @@ end
 function PetLumpy:scareSelf()
     self.scared = true
     self.anim = self.animScared
-    self.scaredTimer:after(60, function() self:destroy() end)
+    self.scaredTimer:after(40, function() self:destroy() end)
     self.scaredTimer:every(15, function()
         local x, y = self.body:getPosition()
         self.tears:setPosition(x, y - 4)

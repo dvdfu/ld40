@@ -5,6 +5,7 @@ local Constants  = require 'src.Constants'
 local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
+local AppleCrate = require 'src.objects.AppleCrate'
 local Boundary   = require 'src.objects.Boundary'
 local Grass      = require 'src.objects.Grass'
 local PetAmanita = require 'src.objects.PetAmanita'
@@ -23,6 +24,7 @@ local sprites = {
     CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
     HEART = love.graphics.newImage('res/img/heart.png'),
     COIN = love.graphics.newImage('res/img/coin.png'),
+    APPLE = love.graphics.newImage('res/img/apple_crate.png'),
 }
 
 local pets = {
@@ -41,8 +43,8 @@ function Game:init()
 end
 
 function Game:enter()
-    self.lives = 3
-    self.money = 0
+    self.lives = 10
+    self.money = 10
     self.moneyOffset = 0
     self.moneyOffsetTimer = Timer()
 
@@ -71,10 +73,7 @@ function Game:enter()
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
 
-    for i = 1, 10 do
-        self:spawnPet()
-        self:spawnApple()
-    end
+    self:spawnPet(PetDasher)
 
     for i = 1, 50 do
         local x = math.random(32, Constants.GAME_WIDTH - 32)
@@ -86,6 +85,8 @@ function Game:enter()
     Boundary(self.container, Constants.GAME_WIDTH - 16, 0, 16, Constants.GAME_HEIGHT) -- right
     Boundary(self.container, 16, 0, Constants.GAME_WIDTH - 32, 16) -- top
     Boundary(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
+
+    AppleCrate(self.container, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT - 40)
 
     self.selection = nil
 
@@ -102,19 +103,10 @@ function Game:update(dt)
     self.moneyOffsetTimer:update(dt)
 end
 
-function Game:spawnPet()
+function Game:spawnPet(pet)
     local x = math.random(32, Constants.GAME_WIDTH - 32)
     local y = math.random(32, Constants.GAME_HEIGHT - 32)
-    local pet = pets[math.random(1, #pets)]
     pet(self.container, x, y)
-    self.dustParticles:setPosition(x, y)
-    self.dustParticles:emit(2)
-end
-
-function Game:spawnApple()
-    local x = math.random(32, Constants.GAME_WIDTH - 32)
-    local y = math.random(32, Constants.GAME_HEIGHT - 32)
-    Apple(self.container, x, y)
     self.dustParticles:setPosition(x, y)
     self.dustParticles:emit(2)
 end
@@ -133,11 +125,37 @@ function Game:onPayout()
     self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')
 end
 
+function Game:buyLife()
+    if self.money >= 50 then
+        self.money = self.money - 50
+        self.lives = self.lives + 1
+    end
+end
+
+function Game:buyApple(crate)
+    if self.money >= 3 then
+        crate:onClick()
+        self.money = self.money - 3
+        self.moneyOffset = -4
+        self.moneyOffsetTimer:clear()
+        self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')
+        if self.selection then self.selection:unselect() end
+        local apple = Apple(self.container, mousePosition.x, mousePosition.y)
+        apple:select()
+        self.selection = apple
+        self.dustParticles:setPosition(mousePosition.x, mousePosition.y)
+        self.dustParticles:emit(2)
+    end
+end
+
 function Game:mousepressed(x, y)
     self.container:forEach(function(object)
         if object:hasTag('selectable') and object:contains(x, y) then
             object:select()
             self.selection = object
+            return
+        elseif object:hasTag('crate') and object:contains(x, y) then
+            self:buyApple(object)
             return
         end
     end)
@@ -155,9 +173,8 @@ function Game:draw()
     love.graphics.draw(self.dustParticles)
     love.graphics.draw(self.appleParticles)
 
-    for i = 1, self.lives do
-        love.graphics.draw(sprites.HEART, 4 + (i - 1) * 11, 4)
-    end
+    love.graphics.draw(sprites.HEART, 4, 4)
+    love.graphics.print(self.lives, 19, 2)
     love.graphics.draw(sprites.COIN, 4, 16 - self.moneyOffset)
     love.graphics.print(self.money, 19, 15 - self.moneyOffset)
 end
