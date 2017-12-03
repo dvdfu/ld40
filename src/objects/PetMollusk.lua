@@ -6,8 +6,8 @@ local PetMollusk = Class.new()
 PetMollusk:include(Pet)
 
 local DAMPING = 0.6
-local SHAPE = love.physics.newCircleShape(6)
 local MASS = 100
+local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
 
 function PetMollusk:init(container, x, y)
@@ -28,6 +28,14 @@ end
 
 function PetMollusk:newAnimation()
     return Animation(SPRITE, 2, 16)
+end
+
+function PetMollusk:collide(col, other, fixture)
+    Pet.collide(self, col, other, fixture)
+    if other:hasTag('apple') then
+        other:destroy()
+        self:resetTime()
+    end
 end
 
 function PetMollusk:getMaxDragSpeed()

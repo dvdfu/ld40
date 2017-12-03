@@ -1,5 +1,6 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
+local Particles = require 'src.Particles'
 local Selectable = require 'src.objects.Selectable'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
@@ -12,6 +13,9 @@ local DAMPING = 1
 local SHAPE = love.physics.newRectangleShape(16, 16)
 local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
+local TIME_RESET = 60 * 18
+local TIME_CRY = 60 * 12
+local TIME_BAWL = 60 * 4
 
 function Pet:init(container, x, y)
     Selectable.init(self, container, x, y)
@@ -21,6 +25,19 @@ function Pet:init(container, x, y)
     self.faceRight = true
     self.moneyTimer = Timer()
     self.moneyTimer:every(180, function() Signal.emit('payout') end)
+    self.tears = Particles.newTears()
+    self.tearsTimer = Timer()
+    self.tearsTimer:every(15, function()
+        if self.timeLeft < TIME_CRY then
+            local x, y = self.body:getPosition()
+            self.tears:setPosition(x, y - 4)
+            self.tears:emit(1)
+            if self.timeLeft < TIME_BAWL then
+                self.tears:emit(3)
+            end
+        end
+    end)
+    self.timeLeft = TIME_RESET
 end
 
 function Pet:newBody(world, x, y)
@@ -41,14 +58,19 @@ function Pet:update(dt)
     self.anim:update(dt * animSpeed)
     self.scaleTimer:update(dt)
     self.moneyTimer:update(dt)
+    self.tearsTimer:update(dt)
+    self.tears:update(dt)
+    if self.timeLeft > 1 then
+        self.timeLeft = self.timeLeft - 1
+        if self.timeLeft == TIME_CRY then self:onCry() end
+    else
+        self:destroy()
+    end
 end
 
 function Pet:collide(col, other, fixture)
     if fixture:getUserData() == 'body' then
-        if other:hasTag('apple') then
-            other:destroy()
-            self:squish(2)
-        elseif other:hasTag('fireball') and not self:hasTag('dragon') then
+        if other:hasTag('fireball') and not self:hasTag('dragon') then
             other:destroy()
             self:destroy()
         elseif other:hasTag('grass') then
@@ -74,12 +96,23 @@ function Pet:squish(amount)
     self.scaleTimer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
 end
 
+function Pet:onCry() end
+
+function Pet:onHappy() end
+
+function Pet:resetTime()
+    self.timeLeft = TIME_RESET
+    self:squish(1.4)
+    self:onHappy()
+end
+
 function Pet:draw()
     local direction = self.faceRight and 1 or -1
     self.anim:draw(
         self.body:getX(), self.body:getY(), 0,
         self.scale.x * direction, self.scale.y,
         SPRITE_OFFSET.x, SPRITE_OFFSET.y)
+    love.graphics.draw(self.tears)
 end
 
 function Pet:getDrawOrder()

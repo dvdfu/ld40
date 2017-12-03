@@ -57,13 +57,13 @@ function PetChin:update(dt)
 end
 
 function PetChin:collide(col, other, fixture)
-    if fixture:getUserData() == 'snag' then
-        if other:hasTag('apple') then
+    Pet.collide(self, col, other, fixture)
+    if other:hasTag('apple') then
+        if fixture:getUserData() == 'snag' then
             self:snag(other:getPosition())
-            other:destroy()
         end
-    else
-        Pet.collide(self, col, other, fixture)
+        other:destroy()
+        self:resetTime()
     end
 end
 
