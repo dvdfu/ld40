@@ -9,8 +9,8 @@ local DAMPING = 0.1
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/dasher.png')
 
-function PetDasher:init(world, x, y)
-    Pet.init(self, world, x, y)
+function PetDasher:init(container, x, y)
+    Pet.init(self, container, x, y)
     self:addTag('dasher')
 end
 

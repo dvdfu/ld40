@@ -6,16 +6,16 @@ local Timer = require 'modules.hump.timer'
 local Fireball = Class.new()
 Fireball:include(Object)
 
-local LIFETIME = 150
+local LIFETIME = 90
 local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPEED = 1
 local SPRITE = love.graphics.newImage('res/img/fireball.png')
 
-function Fireball:init(world, x, y, faceRight)
-    Object.init(self, world, x, y)
+function Fireball:init(container, x, y, faceRight)
+    Object.init(self, container, x, y)
     self:addTag('fireball')
-    self.anim = Animation(SPRITE, 2, 1)
+    self.anim = Animation(SPRITE, 2, 5)
     local direction = faceRight and 1 or -1
     self.body:setLinearVelocity(SPEED * direction, 0)
     self.timer = Timer()
@@ -35,8 +35,19 @@ function Fireball:update(dt)
     self.timer:update(dt)
 end
 
+function Fireball:collide(col, other)
+    if other:hasTag('pet') and not other:hasTag('dragon') then
+        other:destroy()
+        self:destroy()
+    end
+end
+
 function Fireball:draw()
     self.anim:draw(self.body:getX(), self.body:getY(), 0, 1, 1, 8, 8)
+end
+
+function Fireball:getDrawOrder()
+    return 2
 end
 
 return Fireball

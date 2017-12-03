@@ -3,8 +3,19 @@ local Class = require 'modules.hump.class'
 local Container = Class.new()
 
 local function doNothing() end
+local function beginContact(a, b, coll)
+    local objA = a:getUserData()
+    local objB = b:getUserData()
+    objA:collide(coll, objB)
+    objB:collide(coll, objA)
+end
+local function endContact(a, b, coll) end
+local function preSolve(a, b, coll) end
+local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
 
 function Container:init(onDelete)
+    self.world = love.physics.newWorld()
+    self.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
     self.objects = {}
     self.drawOrders = {}
     self.onDelete = onDelete or doNothing
@@ -20,6 +31,7 @@ function Container:update(dt)
             object:update(dt)
         end
     end
+    self.world:update(dt)
 end
 
 function Container:add(object)
@@ -30,6 +42,10 @@ function Container:add(object)
     else
         table.insert(self.drawOrders[d], object)
     end
+end
+
+function Container:getWorld()
+    return self.world
 end
 
 function Container:forEach(callback)

@@ -12,8 +12,8 @@ local FIREBALL_INTERVAL = 200
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
 
-function PetDragon:init(world, x, y)
-    Pet.init(self, world, x, y)
+function PetDragon:init(container, x, y)
+    Pet.init(self, container, x, y)
     self:addTag('dragon')
     self.timer = Timer()
     self.timer:every(FIREBALL_INTERVAL, function() self:breathFire() end)
@@ -37,8 +37,10 @@ function PetDragon:update(dt)
 end
 
 function PetDragon:breathFire()
-    local world = self.body:getWorld()
-    local fireball = Fireball(world, self.body:getX(), self.body:getY(), self.faceRight)
+    local x = self.body:getX() + (self.faceRight and 8 or -8)
+    local y = self.body:getY() + 1
+    local fireball = Fireball(self.container, x, y, self.faceRight)
+    self:squish(2)
 end
 
 function PetDragon:draw()

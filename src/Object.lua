@@ -3,10 +3,12 @@ local Vector = require 'modules.hump.vector'
 
 local Object = Class.new()
 
-function Object:init(world, x, y)
-    self.body = self:newBody(world, x, y)
+function Object:init(container, x, y)
+    self.container = container
+    self.body = self:newBody(container:getWorld(), x, y)
     self.tags = {}
     self.destroyed = false
+    self.container:add(self)
 end
 
 function Object:addTag(tag)

@@ -12,8 +12,8 @@ local SPEED = 2
 local MASS = 100
 local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
 
-function PetMollusk:init(world, x, y)
-    Pet.init(self, world, x, y)
+function PetMollusk:init(container, x, y)
+    Pet.init(self, container, x, y)
     self:addTag('mollusk')
 end
 

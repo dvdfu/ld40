@@ -16,8 +16,8 @@ local SHAPE = love.physics.newCircleShape(6)
 local SPEED = 0.5
 local SPRITE = love.graphics.newImage('res/img/pet/amanita.png')
 
-function PetAmanita:init(world, x, y)
-    Pet.init(self, world, x, y)
+function PetAmanita:init(container, x, y)
+    Pet.init(self, container, x, y)
     self:addTag('amanita')
     self.moveTimer = Timer()
     self.moveTarget = nil

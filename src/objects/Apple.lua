@@ -8,8 +8,8 @@ local RADIUS = 8
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPRITE = love.graphics.newImage('res/img/apple.png')
 
-function Apple:init(world, x, y)
-    Object.init(self, world, x, y)
+function Apple:init(container, x, y)
+    Object.init(self, container, x, y)
     self:addTag('apple')
 end
 

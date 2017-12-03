@@ -11,16 +11,6 @@ local PetDragon  = require 'src.objects.PetDragon'
 local PetMollusk = require 'src.objects.PetMollusk'
 local Wall       = require 'src.objects.Wall'
 
-local function beginContact(a, b, coll)
-    local objA = a:getUserData()
-    local objB = b:getUserData()
-    objA:collide(coll, objB)
-    objB:collide(coll, objA)
-end
-local function endContact(a, b, coll) end
-local function preSolve(a, b, coll) end
-local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
-
 local Game = {}
 
 local sprites = {
@@ -37,16 +27,10 @@ local pets = {
     PetMollusk,
 }
 
-function Game:init()
-end
-
 function Game:enter()
-    self.world = love.physics.newWorld()
-    self.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
-
     self.lives = 3
 
-    self.objects = Container(function(object)
+    self.container = Container(function(object)
         if object:hasTag('apple') then
             local x, y = object:getPosition():unpack()
             self.appleParticles:setPosition(x, y)
@@ -60,25 +44,25 @@ function Game:enter()
         local pet = pets[math.random(1, #pets)]
         local x = math.random(8, Constants.GAME_WIDTH - 8)
         local y = math.random(8, Constants.GAME_HEIGHT - 8)
-        self.objects:add(pet(self.world, x, y))
+        pet(self.container, x, y)
     end
 
     for i = 1, 10 do
         local x = math.random(8, Constants.GAME_WIDTH - 8)
         local y = math.random(8, Constants.GAME_HEIGHT - 8)
-        self.objects:add(Apple(self.world, x, y))
+        Apple(self.container, x, y)
     end
 
     for i = 1, 20 do
         local x = math.random(8, Constants.GAME_WIDTH - 8)
         local y = math.random(8, Constants.GAME_HEIGHT - 8)
-        self.objects:add(Flower(self.world, x, y))
+        Flower(self.container, x, y)
     end
 
-    self.objects:add(Wall(self.world, 0, 0, 4, Constants.GAME_HEIGHT))
-    self.objects:add(Wall(self.world, Constants.GAME_WIDTH - 4, 0, 4, Constants.GAME_HEIGHT))
-    self.objects:add(Wall(self.world, 0, 0, Constants.GAME_WIDTH, 4))
-    self.objects:add(Wall(self.world, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4))
+    Wall(self.container, 0, 0, 4, Constants.GAME_HEIGHT)
+    Wall(self.container, Constants.GAME_WIDTH - 4, 0, 4, Constants.GAME_HEIGHT)
+    Wall(self.container, 0, 0, Constants.GAME_WIDTH, 4)
+    Wall(self.container, 0, Constants.GAME_HEIGHT - 4, Constants.GAME_WIDTH, 4)
 
     self.selectedPet = nil
 
@@ -98,8 +82,7 @@ function Game:update(dt)
     end
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)
-    self.objects:update(dt)
-    self.world:update(dt)
+    self.container:update(dt)
 end
 
 function Game:loseLife()
@@ -110,7 +93,7 @@ function Game:loseLife()
 end
 
 function Game:mousepressed(x, y)
-    self.objects:forEach(function(object)
+    self.container:forEach(function(object)
         if object:hasTag('pet') and object:contains(x, y) then
             object:select()
             self.selectedPet = object
@@ -132,7 +115,7 @@ function Game:mousemoved(x, y, dx, dy)
 end
 
 function Game:draw()
-    self.objects:draw()
+    self.container:draw()
     love.graphics.draw(self.dustParticles)
     love.graphics.draw(self.appleParticles)
 

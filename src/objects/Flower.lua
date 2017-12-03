@@ -13,8 +13,8 @@ local sprites = {
     love.graphics.newImage('res/img/grass.png'),
 }
 
-function Flower:init(world, x, y)
-    Object.init(self, world, x, y + RADIUS)
+function Flower:init(container, x, y)
+    Object.init(self, container, x, y + RADIUS)
     self:addTag('flower')
     self.timer = Timer()
     self.shear = 0

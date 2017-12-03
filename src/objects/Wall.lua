@@ -5,9 +5,9 @@ local Vector = require 'modules.hump.vector'
 local Wall = Class.new()
 Wall:include(Object)
 
-function Wall:init(world, x, y, w, h)
+function Wall:init(container, x, y, w, h)
     self.size = Vector(w, h)
-    Object.init(self, world, x + w / 2, y + h / 2)
+    Object.init(self, container, x + w / 2, y + h / 2)
 end
 
 function Wall:newBody(world, x, y)

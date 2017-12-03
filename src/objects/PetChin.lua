@@ -9,8 +9,8 @@ local DAMPING = 0.3
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/chin.png')
 
-function PetChin:init(world, x, y)
-    Pet.init(self, world, x, y)
+function PetChin:init(container, x, y)
+    Pet.init(self, container, x, y)
     self:addTag('chin')
 end
 
