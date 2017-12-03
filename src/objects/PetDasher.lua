@@ -11,6 +11,7 @@ local SPRITE = love.graphics.newImage('res/img/pet/dasher.png')
 
 function PetDasher:init(container, x, y)
     WalkablePet.init(self, container, x, y)
+    self.anim = Animation(SPRITE, 2, 10)
     self:addTag('dasher')
 end
 

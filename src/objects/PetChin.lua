@@ -22,12 +22,12 @@ local sprites = {
 function PetChin:init(container, x, y)
     Pet.init(self, container, x, y)
     self:addTag('chin')
-    self.tonguePos = Vector(x, y)
-    self.tongueProgress = 0
-    self.tongueTimer = Timer()
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animEat = Animation(sprites.eat, 2, 10)
     self.anim = self.animIdle
+    self.tonguePos = Vector(x, y)
+    self.tongueProgress = 0
+    self.tongueTimer = Timer()
 end
 
 function PetChin:newBody(world, x, y)

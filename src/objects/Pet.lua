@@ -16,7 +16,6 @@ local SPRITE_OFFSET = Vector(8, 8)
 function Pet:init(container, x, y)
     Selectable.init(self, container, x, y)
     self:addTag('pet')
-    self.anim = self:newAnimation()
     self.scale = Vector(1, 1)
     self.scaleTimer = Timer()
     self.faceRight = true
@@ -31,10 +30,6 @@ function Pet:newBody(world, x, y)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
     return body
-end
-
-function Pet:newAnimation()
-    return Animation(SPRITE, 1, 1)
 end
 
 function Pet:update(dt)

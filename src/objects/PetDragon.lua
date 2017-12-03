@@ -15,6 +15,7 @@ local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
 function PetDragon:init(container, x, y)
     Pet.init(self, container, x, y)
     self:addTag('dragon')
+    self.anim = Animation(SPRITE, 2, 10)
     self.timer = Timer()
     self.timer:every(FIREBALL_INTERVAL, function() self:breathFire() end)
 end

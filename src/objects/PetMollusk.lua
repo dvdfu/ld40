@@ -13,6 +13,7 @@ local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
 function PetMollusk:init(container, x, y)
     Pet.init(self, container, x, y)
     self:addTag('mollusk')
+    self.anim = Animation(SPRITE, 2, 10)
 end
 
 function PetMollusk:newBody(world, x, y)

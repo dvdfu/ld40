@@ -25,8 +25,8 @@ local sprites = {
 
 local pets = {
     PetAmanita,
-    PetChin,
-    PetDasher,
+    -- PetChin,
+    -- PetDasher,
     PetDragon,
     PetMollusk,
 }
