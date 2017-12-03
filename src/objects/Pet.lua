@@ -53,7 +53,7 @@ function Pet:collide(col, other)
     if other:hasTag('apple') then
         other:destroy()
         self:squish(2)
-    elseif other:hasTag('flower') then
+    elseif other:hasTag('grass') then
         local vx, vy = self.body:getLinearVelocity()
         other:jostle(vx)
     elseif other:hasTag('lava') then

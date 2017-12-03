@@ -3,7 +3,7 @@ local Constants  = require 'src.Constants'
 local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
-local Flower     = require 'src.objects.Flower'
+local Grass     = require 'src.objects.Grass'
 local Lava       = require 'src.objects.Lava'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
@@ -64,10 +64,10 @@ function Game:enter()
         Apple(self.container, x, y)
     end
 
-    for i = 1, 20 do
+    for i = 1, 50 do
         local x = math.random(32, Constants.GAME_WIDTH - 32)
         local y = math.random(32, Constants.GAME_HEIGHT - 32)
-        Flower(self.container, x, y)
+        Grass(self.container, x, y)
     end
 
     Lava(self.container, 0, 0, 16, Constants.GAME_HEIGHT) -- left

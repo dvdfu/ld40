@@ -5,7 +5,7 @@ local Apple = Class.new()
 Apple:include(Selectable)
 
 local DAMPING = 1
-local RADIUS = 8
+local RADIUS = 4
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPRITE = love.graphics.newImage('res/img/apple.png')
 
@@ -30,7 +30,7 @@ function Apple:collide(col, other)
 end
 
 function Apple:draw()
-    love.graphics.draw(SPRITE, self.body:getX(), self.body:getY(), 0, 1, 1, RADIUS, RADIUS)
+    love.graphics.draw(SPRITE, self.body:getX(), self.body:getY(), 0, 1, 1, 8, 8)
 end
 
 function Apple:getDrawOrder()
