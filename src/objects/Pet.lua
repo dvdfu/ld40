@@ -10,6 +10,7 @@ local Pet = Class.new()
 Pet:include(Selectable)
 
 local DAMPING = 1
+local HEART_SPRITE = love.graphics.newImage('res/img/heart.png')
 local SHAPE = love.physics.newRectangleShape(16, 16)
 local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
@@ -38,6 +39,9 @@ function Pet:init(container, x, y)
         end
     end)
     self.timeLeft = TIME_RESET
+    self.iconVisible = false
+    self.iconOffset = 0
+    self.iconTimer = Timer()
 end
 
 function Pet:newBody(world, x, y)
@@ -58,6 +62,7 @@ function Pet:update(dt)
     self.anim:update(dt * animSpeed)
     self.scaleTimer:update(dt)
     self.moneyTimer:update(dt)
+    self.iconTimer:update(dt)
     self.tearsTimer:update(dt)
     self.tears:update(dt)
     if self.timeLeft > 1 then
@@ -108,16 +113,24 @@ end
 
 function Pet:resetTime()
     self.timeLeft = TIME_RESET
+    self.iconVisible = true
+    self.iconOffset = 1
+    self.iconTimer:clear()
+    self.iconTimer:tween(30, self, {iconOffset = 0}, 'out-cubic',
+        function() self.iconVisible = false end)
     self:onHappy()
 end
 
 function Pet:draw()
     local direction = self.faceRight and 1 or -1
-    self.anim:draw(
-        self.body:getX(), self.body:getY(), 0,
-        self.scale.x * direction, self.scale.y,
+    local x, y = self.body:getPosition()
+    self.anim:draw(x, y, 0, self.scale.x * direction, self.scale.y,
         SPRITE_OFFSET.x, SPRITE_OFFSET.y)
     love.graphics.draw(self.tears)
+    if self.iconVisible then
+        love.graphics.draw(HEART_SPRITE, x, y - 8 + self.iconOffset * 16, 0,
+            self.scale.x, self.scale.y, 5.5, 9)
+    end
 end
 
 function Pet:getDrawOrder()

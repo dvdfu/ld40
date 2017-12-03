@@ -57,19 +57,21 @@ function Game:enter()
             self.appleParticles:emit(10)
         elseif object:hasTag('pet') then
             self.dustParticles:setPosition(x, y)
-            self.dustParticles:emit(1)
-            Tombstone(self.container, x, y)
+            self.dustParticles:emit(2)
+            if not object:hasTag('lumpy') then
+                Tombstone(self.container, x, y)
+            end
             self:onLoseLife()
         elseif object:hasTag('fireball') then
             self.dustParticles:setPosition(x, y)
-            self.dustParticles:emit(1)
+            self.dustParticles:emit(2)
         end
     end)
 
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
 
-    for i = 1, 10 do
+    for i = 1, 30 do
         self:spawnPet()
         self:spawnApple()
     end
@@ -94,10 +96,6 @@ end
 function Game:update(dt)
     if self.selection then
         self.selection:drag(self.mousePosition:unpack())
-        -- if self.selection:getLinearVelocity():len2() > 100 then
-        --     self.dustParticles:setPosition(self.selection:getPosition():unpack())
-        --     self.dustParticles:emit(1)
-        -- end
     end
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)
@@ -111,7 +109,7 @@ function Game:spawnPet()
     local pet = pets[math.random(1, #pets)]
     pet(self.container, x, y)
     self.dustParticles:setPosition(x, y)
-    self.dustParticles:emit(1)
+    self.dustParticles:emit(2)
 end
 
 function Game:spawnApple()
@@ -119,7 +117,7 @@ function Game:spawnApple()
     local y = math.random(32, Constants.GAME_HEIGHT - 32)
     Apple(self.container, x, y)
     self.dustParticles:setPosition(x, y)
-    self.dustParticles:emit(1)
+    self.dustParticles:emit(2)
 end
 
 function Game:onLoseLife()
