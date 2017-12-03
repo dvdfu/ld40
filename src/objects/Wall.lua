@@ -22,7 +22,7 @@ function Wall:update(dt)
 end
 
 function Wall:draw()
-    love.graphics.rectangle('line',
+    love.graphics.rectangle('fill',
         self.body:getX() - self.size.x / 2, self.body:getY() - self.size.y / 2,
         self.size.x, self.size.y)
 end

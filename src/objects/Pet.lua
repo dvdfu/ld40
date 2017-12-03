@@ -106,4 +106,8 @@ function Pet:draw()
     end
 end
 
+function Pet:getDrawOrder()
+    return 2
+end
+
 return Pet

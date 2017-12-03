@@ -47,4 +47,8 @@ end
 
 function Object:draw() end
 
+function Object:getDrawOrder()
+    return 0
+end
+
 return Object

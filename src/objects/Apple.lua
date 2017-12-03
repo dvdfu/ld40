@@ -25,4 +25,8 @@ function Apple:draw()
     love.graphics.draw(SPRITE, self.body:getX(), self.body:getY(), 0, 1, 1, RADIUS, RADIUS)
 end
 
+function Apple:getDrawOrder()
+    return 1
+end
+
 return Apple

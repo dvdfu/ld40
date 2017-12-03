@@ -6,6 +6,7 @@ local function doNothing() end
 
 function Container:init(onDelete)
     self.objects = {}
+    self.drawOrders = {}
     self.onDelete = onDelete or doNothing
 end
 
@@ -23,6 +24,12 @@ end
 
 function Container:add(object)
     table.insert(self.objects, object)
+    local d = object:getDrawOrder()
+    if not self.drawOrders[d] then
+        self.drawOrders[d] = {object}
+    else
+        table.insert(self.drawOrders[d], object)
+    end
 end
 
 function Container:forEach(callback)
@@ -32,8 +39,14 @@ function Container:forEach(callback)
 end
 
 function Container:draw()
-    for _, object in pairs(self.objects) do
-        object:draw()
+    for d, objects in pairs(self.drawOrders) do
+        for i, object in pairs(objects) do
+            if object:isDestroyed() then
+                objects[i] = nil
+            else
+                object:draw()
+            end
+        end
     end
 end
 
