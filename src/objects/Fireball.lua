@@ -24,9 +24,9 @@ end
 
 function Fireball:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
+    body:setUserData(self)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setSensor(true)
-    fixture:setUserData(self)
     return body
 end
 
@@ -35,12 +35,12 @@ function Fireball:update(dt)
     self.timer:update(dt)
 end
 
-function Fireball:collide(col, other)
+function Fireball:collide(col, other, fixture)
     if other:hasTag('solid') then
         self:destroy()
     elseif other:hasTag('apple') then
         other:destroy()
-    elseif other:hasTag('pet') and not other:hasTag('dragon') then
+    elseif other:hasTag('pet') and fixture:getUserData() == 'body' and not other:hasTag('dragon') then
         other:destroy()
         self:destroy()
     end

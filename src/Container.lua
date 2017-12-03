@@ -3,11 +3,11 @@ local Class = require 'modules.hump.class'
 local Container = Class.new()
 
 local function doNothing() end
-local function beginContact(a, b, coll)
-    local objA = a:getUserData()
-    local objB = b:getUserData()
-    objA:collide(coll, objB)
-    objB:collide(coll, objA)
+local function beginContact(fixA, fixB, coll)
+    local objA = fixA:getBody():getUserData()
+    local objB = fixB:getBody():getUserData()
+    objA:collide(coll, objB, fixA)
+    objB:collide(coll, objA, fixB)
 end
 local function endContact(a, b, coll) end
 local function preSolve(a, b, coll) end

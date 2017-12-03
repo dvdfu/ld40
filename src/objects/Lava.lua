@@ -17,10 +17,10 @@ end
 
 function Lava:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'static')
+    body:setUserData(self)
     local shape = love.physics.newRectangleShape(self.size:unpack())
     local fixture = love.physics.newFixture(body, shape)
     fixture:setSensor(true)
-    fixture:setUserData(self)
     return body
 end
 

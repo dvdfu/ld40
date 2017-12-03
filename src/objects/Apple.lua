@@ -17,13 +17,13 @@ end
 function Apple:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
     body:setLinearDamping(DAMPING, DAMPING)
+    body:setUserData(self)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setSensor(true)
-    fixture:setUserData(self)
     return body
 end
 
-function Apple:collide(col, other)
+function Apple:collide(col, other, fixture)
     if other:hasTag('lava') then
         self:destroy()
     end

@@ -30,8 +30,9 @@ end
 function Pet:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
     body:setLinearDamping(DAMPING, DAMPING)
+    body:setUserData(self)
     local fixture = love.physics.newFixture(body, SHAPE)
-    fixture:setUserData(self)
+    fixture:setUserData('body')
     return body
 end
 
@@ -51,15 +52,17 @@ function Pet:update(dt)
     self.moneyTimer:update(dt)
 end
 
-function Pet:collide(col, other)
-    if other:hasTag('apple') then
-        other:destroy()
-        self:squish(2)
-    elseif other:hasTag('grass') then
-        local vx, vy = self.body:getLinearVelocity()
-        other:jostle(vx)
-    elseif other:hasTag('lava') then
-        self:destroy()
+function Pet:collide(col, other, fixture)
+    if fixture:getUserData() == 'body' then
+        if other:hasTag('apple') then
+            other:destroy()
+            self:squish(2)
+        elseif other:hasTag('grass') then
+            local vx, vy = self.body:getLinearVelocity()
+            other:jostle(vx)
+        elseif other:hasTag('lava') then
+            self:destroy()
+        end
     end
 end
 

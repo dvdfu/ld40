@@ -17,8 +17,9 @@ end
 function PetDasher:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
     body:setLinearDamping(DAMPING, DAMPING)
+    body:setUserData(self)
     local fixture = love.physics.newFixture(body, SHAPE)
-    fixture:setUserData(self)
+    fixture:setUserData('body')
     return body
 end
 

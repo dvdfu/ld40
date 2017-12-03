@@ -31,7 +31,7 @@ function Object:getLinearVelocity()
     return Vector(self.body:getLinearVelocity())
 end
 
-function Object:collide(col, other) end
+function Object:collide(col, other, fixture) end
 
 function Object:update(dt) end
 

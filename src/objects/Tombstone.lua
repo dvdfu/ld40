@@ -26,8 +26,8 @@ end
 
 function Tombstone:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'static')
+    body:setUserData(self)
     local fixture = love.physics.newFixture(body, SHAPE)
-    fixture:setUserData(self)
     return body
 end
 
