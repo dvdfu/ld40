@@ -29,10 +29,6 @@ function PetDragon:newBody(world, x, y)
     return body
 end
 
-function PetDragon:newAnimation()
-    return Animation(SPRITE, 2, 10)
-end
-
 function PetDragon:update(dt)
     Pet.update(self, dt)
     if not self:isSelected() then

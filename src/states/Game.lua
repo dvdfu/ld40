@@ -11,6 +11,7 @@ local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
 local PetDasher  = require 'src.objects.PetDasher'
 local PetDragon  = require 'src.objects.PetDragon'
+local PetFerro   = require 'src.objects.PetFerro'
 local PetMollusk = require 'src.objects.PetMollusk'
 local Tombstone  = require 'src.objects.Tombstone'
 
@@ -28,6 +29,7 @@ local pets = {
     PetChin,
     PetDasher,
     PetDragon,
+    PetFerro,
     PetMollusk,
 }
 

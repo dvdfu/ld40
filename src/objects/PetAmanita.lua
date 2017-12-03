@@ -33,10 +33,6 @@ function PetAmanita:newBody(world, x, y)
     return body
 end
 
-function PetAmanita:newAnimation()
-    return Animation(SPRITE, 2, 10)
-end
-
 function PetAmanita:update(dt)
     WanderingPet.update(self, dt)
     self.happyTimer:update(dt)

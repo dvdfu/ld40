@@ -26,10 +26,6 @@ function PetMollusk:newBody(world, x, y)
     return body
 end
 
-function PetMollusk:newAnimation()
-    return Animation(SPRITE, 2, 16)
-end
-
 function PetMollusk:collide(col, other, fixture)
     Pet.collide(self, col, other, fixture)
     if other:hasTag('apple') then

@@ -73,6 +73,8 @@ function Pet:collide(col, other, fixture)
         if other:hasTag('fireball') and not self:hasTag('dragon') then
             other:destroy()
             self:destroy()
+        elseif other:hasTag('ferro') then
+            self:destroy()
         elseif other:hasTag('grass') then
             local vx, vy = self.body:getLinearVelocity()
             other:jostle(vx)

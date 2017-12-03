@@ -42,10 +42,6 @@ function PetChin:newBody(world, x, y)
     return body
 end
 
-function PetChin:newAnimation()
-    return nil
-end
-
 function PetChin:update(dt)
     if self.tongueProgress > 0.01 then
         self.anim = self.animEat
