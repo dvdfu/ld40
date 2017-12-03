@@ -8,12 +8,12 @@ local PetAmanita = Class.new()
 PetAmanita:include(Pet)
 
 local DAMPING = 0.3
-local MOVE_DISTANCE_MIN = 8
-local MOVE_DISTANCE_MAX = 24
+local MOVE_DISTANCE_MIN = 16
+local MOVE_DISTANCE_MAX = 32
 local MOVE_INTERVAL_MIN = 30
 local MOVE_INTERVAL_MAX = 150
 local SHAPE = love.physics.newCircleShape(6)
-local SPEED = 1
+local SPEED = 0.5
 local SPRITE = love.graphics.newImage('res/img/pet/amanita.png')
 
 function PetAmanita:init(world, x, y)

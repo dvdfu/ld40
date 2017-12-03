@@ -7,6 +7,7 @@ local Flower     = require 'src.objects.Flower'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
 local PetDasher  = require 'src.objects.PetDasher'
+local PetDragon  = require 'src.objects.PetDragon'
 local PetMollusk = require 'src.objects.PetMollusk'
 local Wall       = require 'src.objects.Wall'
 
@@ -32,6 +33,7 @@ local pets = {
     PetAmanita,
     PetChin,
     PetDasher,
+    PetDragon,
     PetMollusk,
 }
 
