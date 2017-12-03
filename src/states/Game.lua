@@ -71,7 +71,7 @@ function Game:enter()
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
 
-    for i = 1, 30 do
+    for i = 1, 10 do
         self:spawnPet()
         self:spawnApple()
     end
@@ -88,14 +88,13 @@ function Game:enter()
     Boundary(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
 
     self.selection = nil
-    self.mousePosition = Vector(0, 0)
 
     Signal.register('payout', function() self:onPayout() end)
 end
 
 function Game:update(dt)
     if self.selection then
-        self.selection:drag(self.mousePosition:unpack())
+        self.selection:drag(mousePosition:unpack())
     end
     self.appleParticles:update(dt)
     self.dustParticles:update(dt)
@@ -151,11 +150,6 @@ function Game:mousereleased(x, y)
     end
 end
 
-function Game:mousemoved(x, y, dx, dy)
-    self.mousePosition.x = x
-    self.mousePosition.y = y
-end
-
 function Game:draw()
     self.container:draw()
     love.graphics.draw(self.dustParticles)
@@ -166,12 +160,6 @@ function Game:draw()
     end
     love.graphics.draw(sprites.COIN, 4, 16 - self.moneyOffset)
     love.graphics.print(self.money, 19, 15 - self.moneyOffset)
-
-    if self.selection then
-        love.graphics.draw(sprites.CURSOR_DRAG, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
-    else
-        love.graphics.draw(sprites.CURSOR, self.mousePosition.x, self.mousePosition.y, 0, 1, 1, 4, 1)
-    end
 end
 
 return Game
