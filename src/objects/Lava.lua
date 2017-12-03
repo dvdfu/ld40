@@ -1,39 +1,46 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
-local Vector = require 'modules.hump.vector'
+local Timer = require 'modules.hump.timer'
 
 local Lava = Class.new()
 Lava:include(Object)
 
+local LIFETIME = 90
+local RADIUS = 4
+local SHAPE = love.physics.newCircleShape(RADIUS)
+local SPEED = 1
 local SPRITE = love.graphics.newImage('res/img/lava.png')
 
-function Lava:init(container, x, y, w, h)
-    self.size = Vector(w, h)
-    Object.init(self, container, x + w / 2, y + h / 2)
+function Lava:init(container, x, y)
+    Object.init(self, container, x, y)
+    self:addTag('lava')
     self.anim = Animation(SPRITE, 4, 10)
+    self.timer = Timer()
+    self.timer:after(LIFETIME, function() self:destroy() end)
 end
 
 function Lava:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'static')
     body:setUserData(self)
-    local shape = love.physics.newRectangleShape(self.size:unpack())
-    local fixture = love.physics.newFixture(body, shape)
+    local fixture = love.physics.newFixture(body, SHAPE)
+    fixture:setSensor(true)
     return body
 end
 
 function Lava:update(dt)
     self.anim:update(dt)
+    self.timer:update(dt)
+end
+
+function Lava:collide(col, other, fixture)
+    if other:hasTag('apple') then
+        other:destroy()
+    end
 end
 
 function Lava:draw()
-    local x = self.body:getX() - self.size.x / 2
-    local y = self.body:getY() - self.size.y / 2
-    for i = 0, self.size.x - 1, 16 do
-        for j = 0, self.size.y - 1, 16 do
-            self.anim:draw(x + i, y + j)
-        end
-    end
+    self.anim:draw(self.body:getX(), self.body:getY(), 0, 1, 1, 8, 5)
 end
 
 return Lava

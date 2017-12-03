@@ -5,8 +5,8 @@ local Constants  = require 'src.Constants'
 local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
+local Boundary   = require 'src.objects.Boundary'
 local Grass      = require 'src.objects.Grass'
-local Lava       = require 'src.objects.Lava'
 local PetAmanita = require 'src.objects.PetAmanita'
 local PetChin    = require 'src.objects.PetChin'
 local PetDasher  = require 'src.objects.PetDasher'
@@ -82,10 +82,10 @@ function Game:enter()
         Grass(self.container, x, y)
     end
 
-    Lava(self.container, 0, 0, 16, Constants.GAME_HEIGHT) -- left
-    Lava(self.container, Constants.GAME_WIDTH - 16, 0, 16, Constants.GAME_HEIGHT) -- right
-    Lava(self.container, 16, 0, Constants.GAME_WIDTH - 32, 16) -- top
-    Lava(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
+    Boundary(self.container, 0, 0, 16, Constants.GAME_HEIGHT) -- left
+    Boundary(self.container, Constants.GAME_WIDTH - 16, 0, 16, Constants.GAME_HEIGHT) -- right
+    Boundary(self.container, 16, 0, Constants.GAME_WIDTH - 32, 16) -- top
+    Boundary(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
 
     self.selection = nil
     self.mousePosition = Vector(0, 0)

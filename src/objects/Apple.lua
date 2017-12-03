@@ -19,7 +19,6 @@ function Apple:newBody(world, x, y)
     body:setLinearDamping(DAMPING, DAMPING)
     body:setUserData(self)
     local fixture = love.physics.newFixture(body, SHAPE)
-    fixture:setSensor(true)
     return body
 end
 
