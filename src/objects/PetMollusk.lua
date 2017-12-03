@@ -34,6 +34,10 @@ function PetMollusk:collide(col, other, fixture)
     end
 end
 
+function PetMollusk:spikeImmune()
+    return true
+end
+
 function PetMollusk:getMaxDragSpeed()
     return 1
 end

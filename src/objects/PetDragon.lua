@@ -44,6 +44,10 @@ function PetDragon:collide(col, other, fixture)
     end
 end
 
+function PetDragon:fireballImmune()
+    return true
+end
+
 function PetDragon:breathFire()
     local x = self.body:getX() + (self.faceRight and 8 or -8)
     local y = self.body:getY() + 1

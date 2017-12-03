@@ -77,16 +77,30 @@ end
 
 function Pet:collide(col, other, fixture)
     if fixture:getUserData() == 'body' then
-        if other:hasTag('fireball') and not self:hasTag('dragon') and not self:hasTag('lumpy') then
+        if other:hasTag('fireball') and not self:fireballImmune() then
             other:destroy()
             self:destroy()
-        elseif other:hasTag('ferro') and not self:hasTag('lumpy') then
+        elseif other:hasTag('lava') and not self:lavaImmune() then
+            self:destroy()
+        elseif other:hasTag('ferro') and not self:spikeImmune() then
             self:destroy()
         elseif other:hasTag('grass') then
             local vx, vy = self.body:getLinearVelocity()
             other:jostle(vx)
         end
     end
+end
+
+function Pet:fireballImmune()
+    return false
+end
+
+function Pet:lavaImmune()
+    return false
+end
+
+function Pet:spikeImmune()
+    return false
 end
 
 function Pet:contains(x, y)

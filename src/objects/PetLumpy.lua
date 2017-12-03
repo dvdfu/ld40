@@ -69,6 +69,18 @@ function PetLumpy:getWanderDelay()
     return math.random(90, 150)
 end
 
+function PetLumpy:fireballImmune()
+    return true
+end
+
+function PetLumpy:lavaImmune()
+    return true
+end
+
+function PetLumpy:spikeImmune()
+    return true
+end
+
 function PetLumpy:scareSelf()
     self.scared = true
     self.anim = self.animScared
