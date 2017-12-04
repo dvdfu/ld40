@@ -5,7 +5,7 @@ local Apple = Class.new()
 Apple:include(Selectable)
 
 local DAMPING = 1
-local RADIUS = 4
+local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPRITE = love.graphics.newImage('res/img/apple.png')
 
@@ -26,6 +26,10 @@ function Apple:collide(col, other, fixture)
     if other:hasTag('lava') then
         self:destroy()
     end
+end
+
+function Apple:getMaxDragSpeed()
+    return 30
 end
 
 function Apple:draw()

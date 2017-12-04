@@ -19,12 +19,15 @@ local Tombstone  = require 'src.objects.Tombstone'
 
 local Game = {}
 
+local NEXT_PET_TIME = 180
+local NEXT_PET_TIME_MAX = 540
+
 local sprites = {
     CURSOR = love.graphics.newImage('res/img/cursor.png'),
     CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
     HEART = love.graphics.newImage('res/img/heart.png'),
     COIN = love.graphics.newImage('res/img/coin.png'),
-    APPLE = love.graphics.newImage('res/img/apple_crate.png'),
+    PET = love.graphics.newImage('res/img/pet.png'),
 }
 
 local pets = {
@@ -45,6 +48,7 @@ end
 function Game:enter()
     self.lives = 10
     self.money = 10
+    self.pets = 0
     self.moneyOffset = 0
     self.moneyOffsetTimer = Timer()
 
@@ -73,8 +77,6 @@ function Game:enter()
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
 
-    self:spawnPet(PetDasher)
-
     for i = 1, 50 do
         local x = math.random(32, Constants.GAME_WIDTH - 32)
         local y = math.random(32, Constants.GAME_HEIGHT - 32)
@@ -86,9 +88,13 @@ function Game:enter()
     Boundary(self.container, 16, 0, Constants.GAME_WIDTH - 32, 16) -- top
     Boundary(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
 
-    AppleCrate(self.container, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT - 40)
+    AppleCrate(self.container, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT - 48)
 
     self.selection = nil
+
+    self.nextPetTimer = 0
+    self.nextPetTimerMax = NEXT_PET_TIME
+    self.nextPet = math.random(1, #pets)
 
     Signal.register('payout', function() self:onPayout() end)
 end
@@ -101,6 +107,22 @@ function Game:update(dt)
     self.dustParticles:update(dt)
     self.container:update(dt)
     self.moneyOffsetTimer:update(dt)
+
+    if self.nextPetTimer > 1 then
+        self.nextPetTimer = self.nextPetTimer - 1
+    else
+        self:spawnPet(pets[self.nextPet])
+        if self.nextPet == 1 then
+            self:spawnPet(pets[self.nextPet])
+        end
+        if self.nextPetTimerMax < NEXT_PET_TIME_MAX then
+            self.nextPetTimerMax = self.nextPetTimerMax + 60
+        else
+            self.nextPetTimerMax = NEXT_PET_TIME_MAX
+        end
+        self.nextPetTimer = self.nextPetTimerMax
+        self.nextPet = math.random(1, #pets)
+    end
 end
 
 function Game:spawnPet(pet)
@@ -109,6 +131,7 @@ function Game:spawnPet(pet)
     pet(self.container, x, y)
     self.dustParticles:setPosition(x, y)
     self.dustParticles:emit(2)
+    self.pets = self.pets + 1
 end
 
 function Game:onLoseLife()
@@ -173,10 +196,18 @@ function Game:draw()
     love.graphics.draw(self.dustParticles)
     love.graphics.draw(self.appleParticles)
 
-    love.graphics.draw(sprites.HEART, 4, 4)
-    love.graphics.print(self.lives, 19, 2)
-    love.graphics.draw(sprites.COIN, 4, 16 - self.moneyOffset)
-    love.graphics.print(self.money, 19, 15 - self.moneyOffset)
+    love.graphics.setColor(131, 131, 72)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, 15)
+    love.graphics.setColor(255, 255, 255)
+
+    local x = 16
+    love.graphics.draw(sprites.HEART, x, 2)
+    love.graphics.print(self.lives, x + 15, 1)
+
+    x = x + 32
+    love.graphics.draw(sprites.COIN, x, 2 - self.moneyOffset)
+    love.graphics.print(self.money, x + 15, 1 - self.moneyOffset)
 end
 
 return Game

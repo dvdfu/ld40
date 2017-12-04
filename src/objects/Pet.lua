@@ -127,12 +127,14 @@ end
 
 function Pet:resetTime()
     self.timeLeft = TIME_RESET
-    self.iconVisible = true
-    self.iconOffset = 1
-    self.iconTimer:clear()
-    self.iconTimer:tween(30, self, {iconOffset = 0}, 'out-cubic',
-        function() self.iconVisible = false end)
-    self:onHappy()
+    if not self.iconVisible then
+        self.iconVisible = true
+        self.iconOffset = 1
+        self.iconTimer:clear()
+        self.iconTimer:tween(30, self, {iconOffset = 0}, 'out-cubic',
+            function() self.iconVisible = false end)
+        self:onHappy()
+    end
 end
 
 function Pet:draw()

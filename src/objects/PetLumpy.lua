@@ -9,7 +9,7 @@ PetLumpy:include(WanderingPet)
 
 local DAMPING = 0.1
 local SHAPE = love.physics.newCircleShape(6)
-local SENSOR_SHAPE = love.physics.newCircleShape(20)
+local SENSOR_SHAPE = love.physics.newCircleShape(10)
 
 local sprites = {
     idle = love.graphics.newImage('res/img/pet/lumpy.png'),
