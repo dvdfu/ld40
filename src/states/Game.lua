@@ -67,6 +67,7 @@ function Game:enter()
             self.appleParticles:setPosition(x, y)
             self.appleParticles:emit(10)
         elseif object:hasTag('pet') then
+            self.pets = self.pets - 1
             self.dustParticles:setPosition(x, y)
             self.dustParticles:emit(2)
             if not object:hasTag('lumpy') then
@@ -118,9 +119,11 @@ function Game:update(dt)
     if self.nextPetTimer > 1 then
         self.nextPetTimer = self.nextPetTimer - 1
     else
-        self:spawnPet(pets[self.nextPet])
-        if self.nextPet == 1 then
+        if self.pets < 16 then
             self:spawnPet(pets[self.nextPet])
+            if self.nextPet == 1 then
+                self:spawnPet(pets[self.nextPet])
+            end
         end
         if self.nextPetTimerMax < NEXT_PET_TIME_MAX then
             self.nextPetTimerMax = self.nextPetTimerMax + 60
@@ -184,6 +187,11 @@ function Game:buyApple(crate)
     end
 end
 
+function Game:help()
+    local Instructions = require 'src.states.Instructions'
+    Gamestate.push(Instructions)
+end
+
 function Game:mousepressed(x, y)
     self.container:forEach(function(object)
         if object:hasTag('selectable') and object:contains(x, y) then
@@ -227,6 +235,12 @@ function Game:draw()
     x = x + 32
     love.graphics.draw(sprites.COIN, x, 2 - self.moneyOffset)
     love.graphics.print(self.money, x + 15, 1 - self.moneyOffset)
+
+    x = Constants.GAME_WIDTH / 2 - 10
+    love.graphics.setColor(131, 131, 72)
+    love.graphics.draw(sprites.COIN, x, Constants.GAME_HEIGHT - 32)
+    love.graphics.print(3, x + 13, Constants.GAME_HEIGHT - 33)
+    love.graphics.setColor(255, 255, 255)
 
     if self.overlayPos > 0 then
         love.graphics.setColor(0, 0, 0)
