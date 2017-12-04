@@ -236,12 +236,6 @@ function Game:draw()
     love.graphics.draw(sprites.COIN, x, 2 - self.moneyOffset)
     love.graphics.print(self.money, x + 15, 1 - self.moneyOffset)
 
-    x = Constants.GAME_WIDTH / 2 - 10
-    love.graphics.setColor(131, 131, 72)
-    love.graphics.draw(sprites.COIN, x, Constants.GAME_HEIGHT - 32)
-    love.graphics.print(3, x + 13, Constants.GAME_HEIGHT - 33)
-    love.graphics.setColor(255, 255, 255)
-
     if self.overlayPos > 0 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle('fill', 0, Constants.GAME_HEIGHT * (1 - self.overlayPos),
