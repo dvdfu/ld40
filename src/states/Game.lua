@@ -8,14 +8,8 @@ local Particles  = require 'src.Particles'
 local Apple      = require 'src.objects.Apple'
 local AppleCrate = require 'src.objects.AppleCrate'
 local Boundary   = require 'src.objects.Boundary'
+local Egg        = require 'src.objects.Egg'
 local Grass      = require 'src.objects.Grass'
-local PetAmanita = require 'src.objects.PetAmanita'
-local PetChin    = require 'src.objects.PetChin'
-local PetDasher  = require 'src.objects.PetDasher'
-local PetDragon  = require 'src.objects.PetDragon'
-local PetLumpy   = require 'src.objects.PetLumpy'
-local PetFerro   = require 'src.objects.PetFerro'
-local PetMollusk = require 'src.objects.PetMollusk'
 local Tombstone  = require 'src.objects.Tombstone'
 
 local Game = {}
@@ -29,16 +23,6 @@ local sprites = {
     HEART = love.graphics.newImage('res/img/heart.png'),
     COIN = love.graphics.newImage('res/img/coin.png'),
     PET = love.graphics.newImage('res/img/pet.png'),
-}
-
-local pets = {
-    PetAmanita,
-    PetChin,
-    PetDasher,
-    PetDragon,
-    PetLumpy,
-    PetFerro,
-    PetMollusk,
 }
 
 function Game:init()
@@ -66,6 +50,9 @@ function Game:enter()
         if object:hasTag('apple') then
             self.appleParticles:setPosition(x, y)
             self.appleParticles:emit(10)
+        elseif object:hasTag('egg') then
+            self.dustParticles:setPosition(x, y)
+            self.dustParticles:emit(4)
         elseif object:hasTag('pet') then
             self.pets = self.pets - 1
             self.dustParticles:setPosition(x, y)
@@ -100,9 +87,10 @@ function Game:enter()
 
     self.nextPetTimer = 0
     self.nextPetTimerMax = NEXT_PET_TIME
-    self.nextPet = math.random(1, #pets)
 
     Signal.register('payout', function() self:onPayout() end)
+
+    self:help()
 end
 
 function Game:update(dt)
@@ -119,29 +107,20 @@ function Game:update(dt)
     if self.nextPetTimer > 1 then
         self.nextPetTimer = self.nextPetTimer - 1
     else
-        if self.pets < 16 then
-            self:spawnPet(pets[self.nextPet])
-            if self.nextPet == 1 then
-                self:spawnPet(pets[self.nextPet])
-            end
-        end
+        local x = math.random(32, Constants.GAME_WIDTH - 32)
+        local y = math.random(32, Constants.GAME_HEIGHT - 32)
+        Egg(self.container, x, y)
+        self.dustParticles:setPosition(x, y)
+        self.dustParticles:emit(2)
+        self.pets = self.pets + 1
+
         if self.nextPetTimerMax < NEXT_PET_TIME_MAX then
             self.nextPetTimerMax = self.nextPetTimerMax + 60
         else
             self.nextPetTimerMax = NEXT_PET_TIME_MAX
         end
         self.nextPetTimer = self.nextPetTimerMax
-        self.nextPet = math.random(1, #pets)
     end
-end
-
-function Game:spawnPet(pet)
-    local x = math.random(32, Constants.GAME_WIDTH - 32)
-    local y = math.random(32, Constants.GAME_HEIGHT - 32)
-    pet(self.container, x, y)
-    self.dustParticles:setPosition(x, y)
-    self.dustParticles:emit(2)
-    self.pets = self.pets + 1
 end
 
 function Game:onLoseLife()
