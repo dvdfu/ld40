@@ -212,29 +212,35 @@ function Game:mousereleased(x, y)
     end
 end
 
+function Game:outlinedText(text, x, y)
+    love.graphics.setColor(0, 0, 0)
+    for i = -1, 1, 2 do
+        love.graphics.print(text, x + i, y)
+    end
+    for j = -1, 1, 2 do
+        love.graphics.print(text, x, y + j)
+    end
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.print(text, x, y)
+end
+
 function Game:draw()
     self.container:draw()
-
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, 15)
-    love.graphics.setColor(255, 255, 255)
 
     love.graphics.draw(self.dustParticles)
     love.graphics.draw(self.appleParticles)
 
     local x = 16
-    love.graphics.draw(sprites.HEART, x, 2)
+    love.graphics.draw(sprites.HEART, x, 3)
     if self.lives <= 1 then
-        love.graphics.setColor(215, 83, 21)
-        love.graphics.print(self.lives, x + 15, 1 + math.sin(self.time * 30))
-        love.graphics.setColor(255, 255, 255)
+        self:outlinedText(self.lives, x + 15, 2 + math.sin(self.time * 30))
     else
-        love.graphics.print(self.lives, x + 15, 1)
+        self:outlinedText(self.lives, x + 15, 2)
     end
 
     x = x + 32
-    love.graphics.draw(sprites.COIN, x, 2 - self.moneyOffset)
-    love.graphics.print(self.money, x + 15, 1 - self.moneyOffset)
+    love.graphics.draw(sprites.COIN, x, 3 - self.moneyOffset)
+    self:outlinedText(self.money, x + 15, 2 - self.moneyOffset)
 
     if self.overlayPos > 0 then
         love.graphics.setColor(0, 0, 0)
