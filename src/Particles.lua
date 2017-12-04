@@ -15,7 +15,7 @@ end
 return {
     newApple = function()
         local ps = love.graphics.newParticleSystem(sprites.APPLE)
-        ps:setAreaSpread('ellipse', 8, 8)
+        ps:setAreaSpread('uniform', 8, 8)
         ps:setOffset(3, 3)
         ps:setParticleLifetime(10, 20)
         ps:setQuads(getQuads(4, 6, 6))
@@ -25,7 +25,7 @@ return {
     end,
     newDust = function()
         local ps = love.graphics.newParticleSystem(sprites.DUST)
-        ps:setAreaSpread('ellipse', 4, 4)
+        ps:setAreaSpread('uniform', 4, 4)
         ps:setOffset(8, 8)
         ps:setParticleLifetime(10)
         ps:setQuads(getQuads(6, 16, 16))
@@ -35,7 +35,7 @@ return {
     end,
     newTears = function()
         local ps = love.graphics.newParticleSystem(sprites.TEARS)
-        ps:setAreaSpread('ellipse', 8, 0)
+        ps:setAreaSpread('uniform', 8, 0)
         ps:setDirection(-math.pi / 2)
         ps:setLinearAcceleration(0, 0.1)
         ps:setOffset(2, 2)
