@@ -25,9 +25,16 @@ local sprites = {
     PET = love.graphics.newImage('res/img/pet.png'),
 }
 
+local sounds = {
+    POP = love.audio.newSource('res/sfx/pop.mp3'),
+    THUD_1 = love.audio.newSource('res/sfx/thud1.mp3'),
+}
+
 function Game:init()
     local font = love.graphics.newFont('res/font/redalert.ttf', 13)
     love.graphics.setFont(font)
+
+    Signal.register('payout', function() self:onPayout() end)
 end
 
 function Game:enter()
@@ -88,8 +95,6 @@ function Game:enter()
     self.nextPetTimer = 0
     self.nextPetTimerMax = NEXT_PET_TIME
 
-    Signal.register('payout', function() self:onPayout() end)
-
     self:help()
 end
 
@@ -124,6 +129,7 @@ function Game:update(dt)
 end
 
 function Game:onLoseLife()
+    sounds.THUD_1:play()
     if self.lives > 1 then
         self.lives = self.lives - 1
     else
@@ -163,6 +169,7 @@ function Game:buyApple(crate)
         self.selection = apple
         self.dustParticles:setPosition(mousePosition.x, mousePosition.y)
         self.dustParticles:emit(2)
+        sounds.POP:play()
     end
 end
 

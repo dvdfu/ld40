@@ -31,7 +31,7 @@ local pets = {
 function Egg:init(container, x, y)
     Selectable.init(self, container, x, y)
     self:addTag('egg')
-    self.anim = Animation(SPRITE, 4, 8)
+    self.anim = Animation(SPRITE, 2, 8)
     self.timer = Timer()
     self.timer:after(180, function() self:open() end)
 end
@@ -62,7 +62,7 @@ function Egg:open()
 end
 
 function Egg:draw()
-    self.anim:draw(self.body:getX(), self.body:getY(), 0, 1, 1, 12, 12)
+    self.anim:draw(self.body:getX(), self.body:getY(), 0, 1, 1, 8, 8)
 end
 
 function Egg:getDrawOrder()

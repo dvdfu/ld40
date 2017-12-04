@@ -8,7 +8,7 @@ local PetDragon = Class.new()
 PetDragon:include(Pet)
 
 local DAMPING = 0.3
-local FIREBALL_INTERVAL = 120
+local FIREBALL_INTERVAL = 240
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
 

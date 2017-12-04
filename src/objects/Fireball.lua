@@ -12,6 +12,11 @@ local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPEED = 1
 local SPRITE = love.graphics.newImage('res/img/fireball.png')
 
+local sounds = {
+    FIREBALL_SHOOT = love.audio.newSource('res/sfx/fireball_shoot.wav'),
+    FIREBALL_HIT = love.audio.newSource('res/sfx/fireball_hit.wav'),
+}
+
 function Fireball:init(container, x, y, faceRight)
     Object.init(self, container, x, y)
     self:addTag('fireball')
@@ -20,6 +25,7 @@ function Fireball:init(container, x, y, faceRight)
     self.body:setLinearVelocity(SPEED * direction, 0)
     self.timer = Timer()
     self.timer:after(LIFETIME, function() self:destroy() end)
+    sounds.FIREBALL_SHOOT:play()
 end
 
 function Fireball:newBody(world, x, y)
@@ -41,6 +47,11 @@ function Fireball:collide(col, other, fixture)
     elseif other:hasTag('apple') then
         other:destroy()
     end
+end
+
+function Fireball:destroy()
+    sounds.FIREBALL_HIT:play()
+    Object.destroy(self)
 end
 
 function Fireball:draw()
