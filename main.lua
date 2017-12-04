@@ -5,7 +5,7 @@ love.mouse.setVisible(false)
 math.randomseed(os.time())
 
 local Constants = require 'src.Constants'
-local Title = require 'src.states.Game'
+local Title = require 'src.states.Title'
 local Gamestate = require 'modules.hump.gamestate'
 local Vector = require 'modules.hump.vector'
 

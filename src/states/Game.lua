@@ -1,3 +1,4 @@
+local Gamestate  = require 'modules.hump.gamestate'
 local Signal     = require 'modules.hump.signal'
 local Timer      = require 'modules.hump.timer'
 local Vector     = require 'modules.hump.vector'
@@ -49,8 +50,12 @@ function Game:enter()
     self.lives = 10
     self.money = 10
     self.pets = 0
+    self.time = 0
     self.moneyOffset = 0
     self.moneyOffsetTimer = Timer()
+    self.overlayPos = 1
+    self.overlayTimer = Timer()
+    self.overlayTimer:tween(30, self, {overlayPos = 0}, 'in-cubic')
 
     self.container = Container(function(object)
         local x, y = object:getPosition():unpack()
@@ -107,6 +112,8 @@ function Game:update(dt)
     self.dustParticles:update(dt)
     self.container:update(dt)
     self.moneyOffsetTimer:update(dt)
+    self.overlayTimer:update(dt)
+    self.time = self.time + 1 / 60
 
     if self.nextPetTimer > 1 then
         self.nextPetTimer = self.nextPetTimer - 1
@@ -135,9 +142,15 @@ function Game:spawnPet(pet)
 end
 
 function Game:onLoseLife()
-    if self.lives > 0 then
+    if self.lives > 1 then
         self.lives = self.lives - 1
     else
+        self.lives = 0
+        self.overlayPos = 0
+        self.overlayTimer:tween(120, self, {overlayPos = 1}, 'in-bounce', function()
+            local Title = require 'src.states.Title'
+            Gamestate.switch(Title)
+        end)
     end
 end
 
@@ -193,21 +206,34 @@ end
 
 function Game:draw()
     self.container:draw()
-    love.graphics.draw(self.dustParticles)
-    love.graphics.draw(self.appleParticles)
 
-    love.graphics.setColor(131, 131, 72)
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, 15)
     love.graphics.setColor(255, 255, 255)
 
+    love.graphics.draw(self.dustParticles)
+    love.graphics.draw(self.appleParticles)
+
     local x = 16
     love.graphics.draw(sprites.HEART, x, 2)
-    love.graphics.print(self.lives, x + 15, 1)
+    if self.lives <= 1 then
+        love.graphics.setColor(215, 83, 21)
+        love.graphics.print(self.lives, x + 15, 1 + math.sin(self.time * 30))
+        love.graphics.setColor(255, 255, 255)
+    else
+        love.graphics.print(self.lives, x + 15, 1)
+    end
 
     x = x + 32
     love.graphics.draw(sprites.COIN, x, 2 - self.moneyOffset)
     love.graphics.print(self.money, x + 15, 1 - self.moneyOffset)
+
+    if self.overlayPos > 0 then
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.rectangle('fill', 0, Constants.GAME_HEIGHT * (1 - self.overlayPos),
+            Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
+        love.graphics.setColor(255, 255, 255)
+    end
 end
 
 return Game
