@@ -54,7 +54,7 @@ end
 
 function PetChin:collide(col, other, fixture)
     Pet.collide(self, col, other, fixture)
-    if other:hasTag('apple') then
+    if other:hasTag('apple') and not other:isDestroyed() then
         if fixture:getUserData() == 'snag' then
             self:snag(other:getPosition())
         end

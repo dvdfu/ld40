@@ -48,6 +48,9 @@ function Game:enter()
     self.overlayTimer = Timer()
     self.overlayTimer:tween(30, self, {overlayPos = 0}, 'in-cubic')
 
+    self.appleParticles = Particles.newApple()
+    self.dustParticles = Particles.newDust()
+
     self.container = Container(function(object)
         local x, y = object:getPosition():unpack()
         if object == self.selection then
@@ -73,9 +76,6 @@ function Game:enter()
             self.dustParticles:emit(2)
         end
     end)
-
-    self.appleParticles = Particles.newApple()
-    self.dustParticles = Particles.newDust()
 
     for i = 1, 50 do
         local x = math.random(32, Constants.GAME_WIDTH - 32)
@@ -164,10 +164,13 @@ function Game:buyApple(crate)
         self.moneyOffsetTimer:clear()
         self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')
         if self.selection then self.selection:unselect() end
-        local apple = Apple(self.container, mousePosition.x, mousePosition.y)
+        local x, y = crate:getPosition():unpack()
+        x = x + math.random() - 0.5
+        y = y - 12
+        local apple = Apple(self.container, x, y)
         apple:select()
         self.selection = apple
-        self.dustParticles:setPosition(mousePosition.x, mousePosition.y)
+        self.dustParticles:setPosition(x, y)
         self.dustParticles:emit(2)
         sounds.POP:play()
     end
@@ -220,6 +223,9 @@ function Game:draw()
     love.graphics.draw(sprites.HEART, x, 3)
     if self.lives <= 1 then
         self:outlinedText(self.lives, x + 15, 2 + math.sin(self.time * 30))
+        love.graphics.setColor(215, 83, 21)
+        love.graphics.print(self.lives, x + 15, 2 + math.sin(self.time * 30))
+        love.graphics.setColor(255, 255, 255)
     else
         self:outlinedText(self.lives, x + 15, 2)
     end
