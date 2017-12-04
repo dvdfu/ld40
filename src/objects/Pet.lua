@@ -25,7 +25,7 @@ function Pet:init(container, x, y)
     self.scaleTimer = Timer()
     self.faceRight = true
     self.moneyTimer = Timer()
-    self.moneyTimer:every(180, function() Signal.emit('payout') end)
+    self.moneyTimer:every(180, function() Signal.emit('payout', self:getPayout()) end)
     self.tears = Particles.newTears()
     self.tearsTimer = Timer()
     self.tearsTimer:every(15, function()
@@ -138,6 +138,10 @@ function Pet:resetTime()
         self:onHappy()
     end
     self:getSound():play()
+end
+
+function Pet:getPayout()
+    return 2
 end
 
 function Pet:draw()

@@ -35,11 +35,11 @@ function Game:init()
     local font = love.graphics.newFont('res/font/redalert.ttf', 13)
     love.graphics.setFont(font)
 
-    Signal.register('payout', function() self:onPayout() end)
+    Signal.register('payout', function(amount) self:onPayout(amount) end)
 end
 
 function Game:enter()
-    self.lives = 1
+    self.lives = 5
     self.money = 10
     self.pets = 0
     self.stats = {
@@ -52,6 +52,7 @@ function Game:enter()
     self.overlayPos = 1
     self.overlayTimer = Timer()
     self.overlayTimer:tween(30, self, {overlayPos = 0}, 'in-cubic')
+    self.gameOver = false
 
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
@@ -138,7 +139,8 @@ function Game:onLoseLife()
     sounds.DIE:play()
     if self.lives > 1 then
         self.lives = self.lives - 1
-    else
+    elseif not self.gameOver then
+        self.gameOver = true
         self.lives = 0
         self.overlayPos = 0
         self.overlayTimer:tween(120, self, {overlayPos = 1}, 'in-bounce', function()
@@ -148,9 +150,10 @@ function Game:onLoseLife()
     end
 end
 
-function Game:onPayout()
-    self.money = self.money + 1
-    self.stats.totalMoney = self.stats.totalMoney + 1
+function Game:onPayout(amount)
+    if amount == 0 then return end
+    self.money = self.money + amount
+    self.stats.totalMoney = self.stats.totalMoney + amount
     self.moneyOffset = 4
     self.moneyOffsetTimer:clear()
     self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')
@@ -164,9 +167,9 @@ function Game:buyLife()
 end
 
 function Game:buyApple(crate)
-    if self.money >= 3 then
+    if self.money >= 5 then
         crate:onClick()
-        self.money = self.money - 3
+        self.money = self.money - 5
         self.moneyOffset = -4
         self.moneyOffsetTimer:clear()
         self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')

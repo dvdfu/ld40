@@ -46,6 +46,10 @@ function PetFerro:getWanderDelay()
     return math.random(200, 240)
 end
 
+function PetFerro:getPayout()
+    return 3
+end
+
 function PetFerro:getSound()
     return sound
 end

@@ -70,6 +70,10 @@ function PetAmanita:getWanderDelay()
     return math.random(60, 120)
 end
 
+function PetAmanita:getPayout()
+    return 1
+end
+
 function PetAmanita:getSound()
     return sound
 end

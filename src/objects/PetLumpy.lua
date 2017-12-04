@@ -94,6 +94,10 @@ function PetLumpy:scareSelf()
     end)
 end
 
+function PetLumpy:getPayout()
+    return 0
+end
+
 function PetLumpy:getSound()
     return sound
 end

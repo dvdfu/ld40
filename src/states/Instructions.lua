@@ -15,13 +15,13 @@ local sprites = {
 }
 
 local quirks = {
-    amanita = "Needs friends, not apples",
+    amanita = "Likes having friends",
     chin = "Greedy eater",
-    dasher = "Needs attention, not apples",
-    dragon = "Fire breather",
-    ferro = "Hurts critters",
-    lumpy = "Gives apples, fears death",
-    mollusk = "Heavyweight",
+    dasher = "Likes being pet, leaves a mess",
+    dragon = "Starts fires",
+    ferro = "Hurts others",
+    lumpy = "Drops apples, fears death",
+    mollusk = "Hard to move",
 }
 
 function Instructions:enter(previous)

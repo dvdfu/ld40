@@ -56,7 +56,7 @@ function AppleCrate:draw()
     if self.showText then
         local offset = 8 * (self.scale.y - 1)
         love.graphics.draw(sprites.coin, x + 8, y + 10 + offset, 0, self.scale.x, self.scale.y, 8, 8)
-        love.graphics.print('-' .. 3, x - 12, y + 1 + offset)
+        love.graphics.print('-' .. 5, x - 12, y + 1 + offset)
     end
 end
 
