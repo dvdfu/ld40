@@ -38,10 +38,14 @@ function Game:init()
 end
 
 function Game:enter()
-    self.lives = 10
+    self.lives = 1
     self.money = 10
     self.pets = 0
-    self.time = 0
+    self.stats = {
+        totalPets = 0,
+        totalMoney = 0,
+        time = 0,
+    }
     self.moneyOffset = 0
     self.moneyOffsetTimer = Timer()
     self.overlayPos = 1
@@ -107,7 +111,7 @@ function Game:update(dt)
     self.container:update(dt)
     self.moneyOffsetTimer:update(dt)
     self.overlayTimer:update(dt)
-    self.time = self.time + 1 / 60
+    self.stats.time = self.stats.time + 1 / 60
 
     if self.nextPetTimer > 1 then
         self.nextPetTimer = self.nextPetTimer - 1
@@ -118,6 +122,7 @@ function Game:update(dt)
         self.dustParticles:setPosition(x, y)
         self.dustParticles:emit(2)
         self.pets = self.pets + 1
+        self.stats.totalPets = self.stats.totalPets + 1
 
         if self.nextPetTimerMax < NEXT_PET_TIME_MAX then
             self.nextPetTimerMax = self.nextPetTimerMax + 60
@@ -136,14 +141,15 @@ function Game:onLoseLife()
         self.lives = 0
         self.overlayPos = 0
         self.overlayTimer:tween(120, self, {overlayPos = 1}, 'in-bounce', function()
-            local Title = require 'src.states.Title'
-            Gamestate.switch(Title)
+            local Results = require 'src.states.Results'
+            Gamestate.switch(Results, self.stats)
         end)
     end
 end
 
 function Game:onPayout()
     self.money = self.money + 1
+    self.stats.totalMoney = self.stats.totalMoney + 1
     self.moneyOffset = 4
     self.moneyOffsetTimer:clear()
     self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')
@@ -222,9 +228,9 @@ function Game:draw()
     local x = 16
     love.graphics.draw(sprites.HEART, x, 3)
     if self.lives <= 1 then
-        self:outlinedText(self.lives, x + 15, 2 + math.sin(self.time * 30))
+        self:outlinedText(self.lives, x + 15, 2 + math.sin(self.stats.time * 30))
         love.graphics.setColor(215, 83, 21)
-        love.graphics.print(self.lives, x + 15, 2 + math.sin(self.time * 30))
+        love.graphics.print(self.lives, x + 15, 2 + math.sin(self.stats.time * 30))
         love.graphics.setColor(255, 255, 255)
     else
         self:outlinedText(self.lives, x + 15, 2)
