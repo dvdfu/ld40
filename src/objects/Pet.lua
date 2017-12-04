@@ -42,6 +42,7 @@ function Pet:init(container, x, y)
     self.iconVisible = false
     self.iconOffset = 0
     self.iconTimer = Timer()
+    self:getSound():play()
 end
 
 function Pet:newBody(world, x, y)
@@ -110,6 +111,7 @@ end
 function Pet:select()
     Selectable.select(self)
     self:squish(2)
+    self:getSound():play()
 end
 
 function Pet:squish(amount)
@@ -135,6 +137,7 @@ function Pet:resetTime()
             function() self.iconVisible = false end)
         self:onHappy()
     end
+    self:getSound():play()
 end
 
 function Pet:draw()

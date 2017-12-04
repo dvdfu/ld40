@@ -14,6 +14,8 @@ local sprites = {
     sad = love.graphics.newImage('res/img/pet/amanita_sad.png'),
 }
 
+local sound = love.audio.newSource('res/sfx/amanita.wav')
+
 function PetAmanita:init(container, x, y)
     WanderingPet.init(self, container, x, y)
     self:addTag('amanita')
@@ -66,6 +68,10 @@ end
 
 function PetAmanita:getWanderDelay()
     return math.random(60, 120)
+end
+
+function PetAmanita:getSound()
+    return sound
 end
 
 return PetAmanita

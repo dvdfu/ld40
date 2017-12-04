@@ -10,6 +10,8 @@ local MASS = 100
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
 
+local sound = love.audio.newSource('res/sfx/mollusk.wav')
+
 function PetMollusk:init(container, x, y)
     Pet.init(self, container, x, y)
     self:addTag('mollusk')
@@ -40,6 +42,10 @@ end
 
 function PetMollusk:getMaxDragSpeed()
     return 1
+end
+
+function PetMollusk:getSound()
+    return sound
 end
 
 return PetMollusk

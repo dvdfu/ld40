@@ -16,6 +16,8 @@ local sprites = {
     scared = love.graphics.newImage('res/img/pet/lumpy_scared.png'),
 }
 
+local sound = love.audio.newSource('res/sfx/lumpy.wav')
+
 function PetLumpy:init(container, x, y)
     WanderingPet.init(self, container, x, y)
     self.animIdle = Animation(sprites.idle, 2, 10)
@@ -90,6 +92,10 @@ function PetLumpy:scareSelf()
         self.tears:setPosition(x, y - 4)
         self.tears:emit(4)
     end)
+end
+
+function PetLumpy:getSound()
+    return sound
 end
 
 return PetLumpy

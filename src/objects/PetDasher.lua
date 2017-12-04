@@ -15,6 +15,8 @@ local sprites = {
     happy = love.graphics.newImage('res/img/pet/dasher_happy.png'),
 }
 
+local sound = love.audio.newSource('res/sfx/dasher.wav')
+
 function PetDasher:init(container, x, y)
     WanderingPet.init(self, container, x, y)
     self.animIdle = Animation(sprites.idle, 2, 10)
@@ -72,6 +74,10 @@ end
 
 function PetDasher:getWanderDelay()
     return math.random(200, 300)
+end
+
+function PetDasher:getSound()
+    return sound
 end
 
 return PetDasher

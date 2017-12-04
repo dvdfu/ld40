@@ -19,6 +19,8 @@ local sprites = {
     tongueTip = love.graphics.newImage('res/img/tongue_tip.png'),
 }
 
+local sound = love.audio.newSource('res/sfx/chin.wav')
+
 function PetChin:init(container, x, y)
     Pet.init(self, container, x, y)
     self:addTag('chin')
@@ -81,6 +83,10 @@ function PetChin:draw()
         love.graphics.draw(sprites.tongueBody, pos.x, pos.y, delta:angleTo(), delta:len() / 6, 1, 0, 3)
         love.graphics.draw(sprites.tongueTip, pos.x + delta.x, pos.y + delta.y, 0, 1, 1, 3, 3)
     end
+end
+
+function PetChin:getSound()
+    return sound
 end
 
 return PetChin

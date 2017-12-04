@@ -28,6 +28,7 @@ local sprites = {
 local sounds = {
     POP = love.audio.newSource('res/sfx/pop.mp3'),
     THUD_1 = love.audio.newSource('res/sfx/thud1.mp3'),
+    DIE = love.audio.newSource('res/sfx/die.wav'),
 }
 
 function Game:init()
@@ -134,7 +135,7 @@ function Game:update(dt)
 end
 
 function Game:onLoseLife()
-    sounds.THUD_1:play()
+    sounds.DIE:play()
     if self.lives > 1 then
         self.lives = self.lives - 1
     else
@@ -204,6 +205,7 @@ function Game:mousereleased(x, y)
     if self.selection then
         self.selection:unselect()
         self.selection = nil
+        sounds.THUD_1:play()
     end
 end
 

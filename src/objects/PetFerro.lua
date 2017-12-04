@@ -9,6 +9,8 @@ local DAMPING = 1
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/ferro.png')
 
+local sound = love.audio.newSource('res/sfx/ferro.wav')
+
 function PetFerro:init(container, x, y)
     WanderingPet.init(self, container, x, y)
     self.anim = Animation(SPRITE, 2, 10)
@@ -42,6 +44,10 @@ end
 
 function PetFerro:getWanderDelay()
     return math.random(200, 240)
+end
+
+function PetFerro:getSound()
+    return sound
 end
 
 return PetFerro

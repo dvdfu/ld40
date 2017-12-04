@@ -12,6 +12,8 @@ local FIREBALL_INTERVAL = 240
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
 
+local sound = love.audio.newSource('res/sfx/dragon.wav')
+
 function PetDragon:init(container, x, y)
     Pet.init(self, container, x, y)
     self:addTag('dragon')
@@ -58,6 +60,10 @@ end
 
 function PetDragon:draw()
     Pet.draw(self)
+end
+
+function PetDragon:getSound()
+    return sound
 end
 
 return PetDragon
