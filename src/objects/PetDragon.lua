@@ -55,7 +55,7 @@ function PetDragon:breathFire()
     local y = self.body:getY() + 1
     local fireball = Fireball(self.container, x, y, self.faceRight)
     self.faceRight = not self.faceRight
-    self:squish(2)
+    self:squish()
 end
 
 function PetDragon:draw()

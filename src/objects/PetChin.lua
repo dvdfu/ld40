@@ -70,7 +70,7 @@ function PetChin:snag(target)
     self.tongueTimer:clear()
     self.tongueProgress = 1
     self.tongueTimer:tween(30, self, {tongueProgress = 0}, 'in-cubic')
-    self:squish(2)
+    self:squish()
 end
 
 function PetChin:draw()

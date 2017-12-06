@@ -3,11 +3,13 @@ local Class = require 'modules.hump.class'
 local Particles = require 'src.Particles'
 local Selectable = require 'src.objects.Selectable'
 local Signal = require 'modules.hump.signal'
+local Squishable = require 'src.Squishable'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 
 local Pet = Class.new()
 Pet:include(Selectable)
+Pet:include(Squishable)
 
 local DAMPING = 1
 local HEART_SPRITE = love.graphics.newImage('res/img/heart.png')
@@ -20,9 +22,8 @@ local TIME_BAWL = 60 * 4
 
 function Pet:init(container, x, y)
     Selectable.init(self, container, x, y)
+    Squishable.init(self)
     self:addTag('pet')
-    self.scale = Vector(1, 1)
-    self.scaleTimer = Timer()
     self.faceRight = true
     self.moneyTimer = Timer()
     self.moneyTimer:every(180, function() Signal.emit('payout', self:getPayout()) end)
@@ -55,13 +56,13 @@ function Pet:newBody(world, x, y)
 end
 
 function Pet:update(dt)
+    Squishable.update(self, dt)
     local vx, vy = self.body:getLinearVelocity()
     if vx > 0.1 then self.faceRight = true end
     if vx < -0.1 then self.faceRight = false end
 
     local animSpeed = self.selected and 2 or 1
     self.anim:update(dt * animSpeed)
-    self.scaleTimer:update(dt)
     self.moneyTimer:update(dt)
     self.iconTimer:update(dt)
     self.tearsTimer:update(dt)
@@ -110,15 +111,8 @@ end
 
 function Pet:select()
     Selectable.select(self)
-    self:squish(2)
+    self:squish()
     self:getSound():play()
-end
-
-function Pet:squish(amount)
-    self.scale.x = amount
-    self.scale.y = 1 / amount
-    self.scaleTimer:clear()
-    self.scaleTimer:tween(60, self.scale, {x = 1, y = 1}, 'out-elastic')
 end
 
 function Pet:onCry() end
@@ -147,12 +141,11 @@ end
 function Pet:draw()
     local direction = self.faceRight and 1 or -1
     local x, y = self.body:getPosition()
-    self.anim:draw(x, y, 0, self.scale.x * direction, self.scale.y,
-        SPRITE_OFFSET.x, SPRITE_OFFSET.y)
+    local sx, sy = self:getSquish()
+    self.anim:draw(x, y, 0, sx * direction, sy, SPRITE_OFFSET.x, SPRITE_OFFSET.y)
     love.graphics.draw(self.tears)
     if self.iconVisible then
-        love.graphics.draw(HEART_SPRITE, x, y - 8 + self.iconOffset * 16, 0,
-            self.scale.x, self.scale.y, 5.5, 9)
+        love.graphics.draw(HEART_SPRITE, x, y - 8 + self.iconOffset * 16, 0, sx, sy, 5.5, 9)
     end
 end
 

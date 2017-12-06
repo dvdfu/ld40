@@ -13,6 +13,7 @@ local SHAPE = love.physics.newCircleShape(6)
 local sprites = {
     idle = love.graphics.newImage('res/img/pet/dasher.png'),
     happy = love.graphics.newImage('res/img/pet/dasher_happy.png'),
+    sad = love.graphics.newImage('res/img/pet/dasher_sad.png'),
 }
 
 local sound = love.audio.newSource('res/sfx/dasher.wav')
@@ -21,6 +22,7 @@ function PetDasher:init(container, x, y)
     WanderingPet.init(self, container, x, y)
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animHappy = Animation(sprites.happy, 2, 10)
+    self.animSad = Animation(sprites.happy, 2, 10)
     self.anim = self.animIdle
     self:addTag('dasher')
     self.lavaTimer = Timer()
@@ -53,6 +55,10 @@ function PetDasher:onHappy()
     self.anim = self.animHappy
     self.happyTimer:clear()
     self.happyTimer:after(60, function() self.anim = self.animIdle end)
+end
+
+function PetDasher:onCry()
+    self.anim = self.animSad
 end
 
 function PetDasher:select()

@@ -43,4 +43,8 @@ function Lava:draw()
     self.anim:draw(self.body:getX(), self.body:getY(), 0, 1, 1, 8, 5)
 end
 
+function Lava:getDrawOrder()
+    return 0
+end
+
 return Lava

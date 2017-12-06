@@ -34,7 +34,7 @@ function WanderingPet:relocate()
         local radius = self:getWanderDistance()
         local delta = Vector(math.cos(angle), math.sin(angle)) * radius
         self.moveTarget = self:getPosition() + delta
-        self:squish(1.3)
+        self:squish(1.4)
     end
 
     self.moveTimer:clear()
