@@ -26,6 +26,7 @@ end
 function Title:draw()
     self.anim:draw(Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2 - 20,
         0, 1, 1, 192 / 2, 120 / 2)
+    love.graphics.print('v1.0', 4, 4)
     love.graphics.printf('made by @dvdfu for Ludum Dare 40\nClick to Play!',
         Constants.GAME_WIDTH / 2 - 128, Constants.GAME_HEIGHT / 2 + 36, 256, 'center')
 end

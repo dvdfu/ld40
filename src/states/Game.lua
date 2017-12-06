@@ -171,7 +171,7 @@ function Game:onLoseLife()
         self.lives = 0
         self.overlayTimer:after(180, function()
             self.overlayPos = 0
-            self.overlayTimer:tween(120, self, {overlayPos = 1}, 'in-bounce', function()
+            self.overlayTimer:tween(120, self, {overlayPos = 1}, 'out-quad', function()
                 local Results = require 'src.states.Results'
                 Gamestate.switch(Results, self.stats)
             end)
