@@ -6,12 +6,12 @@ local Sprites = require 'src.Sprites'
 local Instructions = {}
 
 local quirks = {
-    amanita = "Likes having friends",
+    amanita = "Likes friends",
     chin = "Greedy eater",
     dasher = "Likes being pet, leaves a mess",
-    dragon = "Starts fires",
+    dragon = "Breathes fire",
     ferro = "Hurts others",
-    lumpy = "Drops apples, fears death",
+    lumpy = "Drops apples, fears tombstones",
     mollusk = "Hard to move",
 }
 
