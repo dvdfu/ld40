@@ -18,6 +18,7 @@ local Game = {}
 
 local NEXT_PET_TIME = 180
 local NEXT_PET_TIME_MAX = 540
+local LIFE_COST = 150
 
 local function help()
     local Instructions = require 'src.states.Instructions'
@@ -160,11 +161,12 @@ function Game:onPayout(amount)
     self.moneyOffset = 4
     self.moneyOffsetTimer:clear()
     self.moneyOffsetTimer:tween(10, self, {moneyOffset = 0}, 'out-quad')
+    self:buyLife()
 end
 
 function Game:buyLife()
-    if self.money < 50 then return end
-    self.money = self.money - 50
+    if self.money < LIFE_COST then return end
+    self.money = self.money - LIFE_COST
     self.lives = self.lives + 1
 end
 
@@ -240,6 +242,15 @@ function Game:draw()
     x = x + 32
     love.graphics.draw(Sprites.ui.COIN, x, 3 - self.moneyOffset)
     outlinedText(self.money, x + 15, 2 - self.moneyOffset)
+
+    x = x + 80
+    outlinedText(LIFE_COST, x, 2)
+    x = x + 18
+    love.graphics.draw(Sprites.ui.COIN, x, 3)
+    x = x + 14
+    outlinedText('=', x, 2)
+    x = x + 7
+    love.graphics.draw(Sprites.ui.HEART, x, 3)
 
     if self.overlayPos > 0 then
         love.graphics.setColor(0, 0, 0)
