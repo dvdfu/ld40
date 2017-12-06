@@ -50,3 +50,15 @@ function love.mousemoved(x, y, dx, dy)
     mousePosition.y = y / scale
     Gamestate.mousemoved(x / scale, y / scale, dx / scale, dy / scale)
 end
+
+function love.touchpressed(id, x, y, dx, dy, pressure)
+    love.mousepressed(x, y)
+end
+
+function love.touchreleased(id, x, y, dx, dy, pressure)
+    love.mousereleased(x, y)
+end
+
+function love.touchmoved(id, x, y, dx, dy, pressure)
+    love.mousemoved(x, y, dx, dy)
+end
