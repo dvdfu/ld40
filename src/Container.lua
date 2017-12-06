@@ -55,12 +55,15 @@ function Container:forEach(callback)
 end
 
 function Container:draw()
-    for d, objects in pairs(self.drawOrders) do
-        for i, object in pairs(objects) do
-            if object:isDestroyed() then
-                objects[i] = nil
-            else
-                object:draw()
+    for i = 0, 5 do
+        local objects = self.drawOrders[i]
+        if objects then
+            for i, object in pairs(objects) do
+                if object:isDestroyed() then
+                    objects[i] = nil
+                else
+                    object:draw()
+                end
             end
         end
     end
