@@ -5,7 +5,6 @@ local WanderingPet = require 'src.objects.WanderingPet'
 local PetFerro = Class.new()
 PetFerro:include(WanderingPet)
 
-local DAMPING = 1
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/ferro.png')
 
@@ -26,13 +25,9 @@ function PetFerro:init(container, x, y)
     self:addTag('ferro')
 end
 
-function PetFerro:newBody(world, x, y)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
-    body:setUserData(self)
+function PetFerro:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
-    return body
 end
 
 return PetFerro

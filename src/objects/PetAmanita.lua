@@ -6,7 +6,6 @@ local WanderingPet = require 'src.objects.WanderingPet'
 local PetAmanita = Class.new()
 PetAmanita:include(WanderingPet)
 
-local DAMPING = 0.3
 local SHAPE = love.physics.newCircleShape(6)
 local sprites = {
     idle = love.graphics.newImage('res/img/pet/amanita.png'),
@@ -18,6 +17,7 @@ local sound = love.audio.newSource('res/sfx/amanita.wav')
 
 function PetAmanita:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
+        damping = 0.3,
         payout = 1,
         sound = sound,
         wanderSpeed = 0.5,
@@ -34,13 +34,9 @@ function PetAmanita:init(container, x, y)
     self.happyTimer = Timer()
 end
 
-function PetAmanita:newBody(world, x, y)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
-    body:setUserData(self)
+function PetAmanita:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
-    return body
 end
 
 function PetAmanita:update(dt)
@@ -51,7 +47,7 @@ end
 function PetAmanita:collide(col, other, fixture)
     WanderingPet.collide(self, col, other, fixture)
     if other:hasTag('amanita') then
-        self:resetTime()
+        self:makeHappy()
     end
 end
 

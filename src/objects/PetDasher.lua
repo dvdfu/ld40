@@ -7,7 +7,6 @@ local Timer = require 'modules.hump.timer'
 local PetDasher = Class.new()
 PetDasher:include(WanderingPet)
 
-local DAMPING = 0.1
 local SHAPE = love.physics.newCircleShape(6)
 
 local sprites = {
@@ -20,6 +19,7 @@ local sound = love.audio.newSource('res/sfx/dasher.wav')
 
 function PetDasher:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
+        damping = 0.1,
         immuneLava = true,
         payout = 2,
         sound = sound,
@@ -29,38 +29,34 @@ function PetDasher:init(container, x, y)
         wanderDelayMin = 200,
         wanderDelayMax = 300,
     })
+    self:addTag('dasher')
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animHappy = Animation(sprites.happy, 2, 10)
     self.animSad = Animation(sprites.happy, 2, 10)
     self.anim = self.animIdle
-    self:addTag('dasher')
-    self.lavaTimer = Timer()
-    self.lavaTimer:every(20, function()
-        if not self:isSelected() then
-            local x, y = self.body:getPosition()
-            Lava(self.container, x, y + 4)
-        end
+    self.lavaSpawnTimer = Timer()
+    self.lavaSpawnTimer:every(20, function()
+        local x, y = self.body:getPosition()
+        Lava(self.container, x, y + 4)
     end)
     self.happyTimer = Timer()
 end
 
-function PetDasher:newBody(world, x, y)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
-    body:setUserData(self)
+function PetDasher:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
-    return body
 end
 
 function PetDasher:update(dt)
     WanderingPet.update(self, dt)
-    self.lavaTimer:update(dt)
+    if not self:isSelected() then
+        self.lavaSpawnTimer:update(dt)
+    end
     self.happyTimer:update(dt)
 end
 
 function PetDasher:onHappy()
-    self:squish(1.4)
+    WanderingPet.onHappy(self)
     self.anim = self.animHappy
     self.happyTimer:clear()
     self.happyTimer:after(60, function() self.anim = self.animIdle end)
@@ -72,7 +68,7 @@ end
 
 function PetDasher:select()
     WanderingPet.select(self)
-    self:resetTime()
+    self:makeHappy()
 end
 
 return PetDasher

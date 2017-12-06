@@ -7,7 +7,6 @@ local Timer = require 'modules.hump.timer'
 local PetDragon = Class.new()
 PetDragon:include(Pet)
 
-local DAMPING = 0.3
 local FIREBALL_INTERVAL = 240
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
@@ -23,23 +22,21 @@ function PetDragon:init(container, x, y)
     })
     self:addTag('dragon')
     self.anim = Animation(SPRITE, 2, 10)
-    self.timer = Timer()
-    self.timer:every(FIREBALL_INTERVAL, function() self:breathFire() end)
+    self.fireballSpawnTimer = Timer()
+    self.fireballSpawnTimer:every(FIREBALL_INTERVAL, function()
+        self:breathFire()
+    end)
 end
 
-function PetDragon:newBody(world, x, y)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
-    body:setUserData(self)
+function PetDragon:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
-    return body
 end
 
 function PetDragon:update(dt)
     Pet.update(self, dt)
     if not self:isSelected() then
-        self.timer:update(dt)
+        self.fireballSpawnTimer:update(dt)
     end
 end
 

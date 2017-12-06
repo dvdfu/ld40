@@ -11,7 +11,6 @@ local Pet = Class.new()
 Pet:include(Selectable)
 Pet:include(Squishable)
 
-local DAMPING = 1
 local HEART_SPRITE = love.graphics.newImage('res/img/heart.png')
 local SHAPE = love.physics.newRectangleShape(16, 16)
 local SPRITE = love.graphics.newImage('res/img/pet/default.png')
@@ -21,6 +20,7 @@ local TIME_CRY = 60 * 6
 local TIME_BAWL = 60 * 2
 
 local DEFAULT_PROPS = {
+    damping = 1,
     dragSpeedMax = 30,
     immuneFireball = false,
     immuneLava = false,
@@ -33,10 +33,10 @@ function Pet:init(container, x, y, props)
     for key, value in pairs(DEFAULT_PROPS) do
         if not props[key] then props[key] = value end
     end
+    self.props = props
     Selectable.init(self, container, x, y)
     Squishable.init(self)
     self:addTag('pet')
-    self.props = props
     self.direction = 1
 
     self.moneyTimer = Timer()
@@ -60,11 +60,15 @@ end
 
 function Pet:newBody(world, x, y)
     local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
+    body:setLinearDamping(self.props.damping, self.props.damping)
     body:setUserData(self)
+    self:onCreateBody(body)
+    return body
+end
+
+function Pet:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
-    return body
 end
 
 function Pet:update(dt)
@@ -101,7 +105,7 @@ function Pet:collide(col, other, fixture)
     if fixture:getUserData() == 'body' then
         if self.props.appleEater and other:hasTag('apple') and not other:isDestroyed() then
             other:destroy()
-            self:resetTime()
+            self:makeHappy()
         elseif not self.props.immuneFireball and other:hasTag('fireball') then
             other:destroy()
             self:destroy()
@@ -133,7 +137,7 @@ function Pet:onCry() end
 
 function Pet:onHappy() end
 
-function Pet:resetTime()
+function Pet:makeHappy()
     self.happiness = TIME_RESET
     if not self:iconVisible() then
         self.iconOffset = 1

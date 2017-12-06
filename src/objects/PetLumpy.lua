@@ -7,7 +7,6 @@ local WanderingPet = require 'src.objects.WanderingPet'
 local PetLumpy = Class.new()
 PetLumpy:include(WanderingPet)
 
-local DAMPING = 0.1
 local SHAPE = love.physics.newCircleShape(6)
 local SENSOR_SHAPE = love.physics.newCircleShape(10)
 
@@ -20,6 +19,7 @@ local sound = love.audio.newSource('res/sfx/lumpy.wav')
 
 function PetLumpy:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
+        damping = 0.1,
         immuneFireball = true,
         immuneLava = true,
         immuneSpike = true,
@@ -44,16 +44,12 @@ function PetLumpy:init(container, x, y)
     self:addTag('lumpy')
 end
 
-function PetLumpy:newBody(world, x, y)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
-    body:setUserData(self)
+function PetLumpy:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
     local sensorFixture = love.physics.newFixture(body, SENSOR_SHAPE)
     sensorFixture:setSensor(true)
     sensorFixture:setUserData('sensor')
-    return body
 end
 
 function PetLumpy:update(dt)

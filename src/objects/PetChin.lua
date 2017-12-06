@@ -7,7 +7,6 @@ local Timer = require 'modules.hump.timer'
 local PetChin = Class.new()
 PetChin:include(Pet)
 
-local DAMPING = 0.3
 local SHAPE = love.physics.newCircleShape(6)
 local SNAG_LENGTH = 32
 local SNAG_SHAPE = love.physics.newCircleShape(SNAG_LENGTH)
@@ -36,24 +35,15 @@ function PetChin:init(container, x, y)
     self.tongueTimer = Timer()
 end
 
-function PetChin:newBody(world, x, y)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
-    body:setLinearDamping(DAMPING, DAMPING)
-    body:setUserData(self)
+function PetChin:onCreateBody(body)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
     local snagFixture = love.physics.newFixture(body, SNAG_SHAPE)
     snagFixture:setSensor(true)
     snagFixture:setUserData('snag')
-    return body
 end
 
 function PetChin:update(dt)
-    if self.tongueProgress > 0.01 then
-        self.anim = self.animEat
-    else
-        self.anim = self.animIdle
-    end
     Pet.update(self, dt)
     self.tongueTimer:update(dt)
 end
@@ -69,10 +59,12 @@ function PetChin:collide(col, other, fixture)
 end
 
 function PetChin:snag(target)
+    self.anim = self.animEat
     self.tonguePos = target
-    self.tongueTimer:clear()
     self.tongueProgress = 1
-    self.tongueTimer:tween(30, self, {tongueProgress = 0}, 'in-cubic')
+    self.tongueTimer:clear()
+    self.tongueTimer:tween(30, self, {tongueProgress = 0}, 'in-cubic',
+        function() self.anim = self.animIdle end)
     self:squish()
 end
 
