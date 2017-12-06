@@ -8,6 +8,7 @@ local DAMPING = 1
 local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPRITE = love.graphics.newImage('res/img/apple.png')
+local sound = love.audio.newSource('res/sfx/pop.mp3')
 
 function Apple:init(container, x, y)
     Selectable.init(self, container, x, y)
@@ -26,6 +27,11 @@ function Apple:collide(col, other, fixture)
     if other:hasTag('lava') then
         self:destroy()
     end
+end
+
+function Apple:select()
+    Selectable.select(self)
+    sound:play()
 end
 
 function Apple:draw()

@@ -26,7 +26,6 @@ local sprites = {
 }
 
 local sounds = {
-    POP = love.audio.newSource('res/sfx/pop.mp3'),
     THUD_1 = love.audio.newSource('res/sfx/thud1.mp3'),
     DIE = love.audio.newSource('res/sfx/die.wav'),
 }
@@ -182,7 +181,6 @@ function Game:buyApple(crate)
         self.selection = apple
         self.dustParticles:setPosition(x, y)
         self.dustParticles:emit(2)
-        sounds.POP:play()
     end
 end
 

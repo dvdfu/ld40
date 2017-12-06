@@ -8,7 +8,6 @@ PetMollusk:include(Pet)
 local MASS = 100
 local SHAPE = love.physics.newCircleShape(6)
 local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
-
 local sound = love.audio.newSource('res/sfx/mollusk.wav')
 
 function PetMollusk:init(container, x, y)

@@ -65,7 +65,7 @@ function PetChin:snag(target)
     self.tongueTimer:clear()
     self.tongueTimer:tween(30, self, {tongueProgress = 0}, 'in-cubic',
         function() self.anim = self.animIdle end)
-    self:squish()
+    self:makeHappy()
 end
 
 function PetChin:draw()
