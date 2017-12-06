@@ -7,12 +7,8 @@ math.randomseed(os.time())
 local Constants = require 'src.Constants'
 local Title = require 'src.states.Title'
 local Gamestate = require 'modules.hump.gamestate'
+local Sprites = require 'src.Sprites'
 local Vector = require 'modules.hump.vector'
-
-local sprites = {
-    CURSOR = love.graphics.newImage('res/img/cursor.png'),
-    CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
-}
 
 mousePosition = Vector()
 mouseDown = false
@@ -32,9 +28,9 @@ function love.draw()
 
     local x, y = mousePosition:unpack()
     if mouseDown then
-        love.graphics.draw(sprites.CURSOR_DRAG, x, y, 0, 1, 1, 4, 1)
+        love.graphics.draw(Sprites.ui.CURSOR_DRAG, x, y, 0, 1, 1, 4, 1)
     else
-        love.graphics.draw(sprites.CURSOR, x, y, 0, 1, 1, 4, 1)
+        love.graphics.draw(Sprites.ui.CURSOR, x, y, 0, 1, 1, 4, 1)
     end
 end
 

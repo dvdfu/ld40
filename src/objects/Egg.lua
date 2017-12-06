@@ -9,6 +9,7 @@ local PetLumpy   = require 'src.objects.PetLumpy'
 local PetFerro   = require 'src.objects.PetFerro'
 local PetMollusk = require 'src.objects.PetMollusk'
 local Selectable = require 'src.objects.Selectable'
+local Sprites = require 'src.Sprites'
 
 local Egg = Class.new()
 Egg:include(Selectable)
@@ -16,7 +17,6 @@ Egg:include(Selectable)
 local DAMPING = 1
 local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
-local SPRITE = love.graphics.newImage('res/img/egg.png')
 
 local pets = {
     PetAmanita,
@@ -31,7 +31,7 @@ local pets = {
 function Egg:init(container, x, y)
     Selectable.init(self, container, x, y)
     self:addTag('egg')
-    self.anim = Animation(SPRITE, 2, 8)
+    self.anim = Animation(Sprites.object.EGG, 2, 8)
     self.timer = Timer()
     self.timer:after(180, function() self:open() end)
 end

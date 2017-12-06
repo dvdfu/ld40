@@ -5,6 +5,7 @@ local Vector     = require 'modules.hump.vector'
 local Constants  = require 'src.Constants'
 local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
+local Sprites    = require 'src.Sprites'
 local Apple      = require 'src.objects.Apple'
 local AppleCrate = require 'src.objects.AppleCrate'
 local Boundary   = require 'src.objects.Boundary'
@@ -16,14 +17,6 @@ local Game = {}
 
 local NEXT_PET_TIME = 180
 local NEXT_PET_TIME_MAX = 540
-
-local sprites = {
-    CURSOR = love.graphics.newImage('res/img/cursor.png'),
-    CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
-    HEART = love.graphics.newImage('res/img/heart.png'),
-    COIN = love.graphics.newImage('res/img/coin.png'),
-    PET = love.graphics.newImage('res/img/pet.png'),
-}
 
 local sounds = {
     THUD_1 = love.audio.newSource('res/sfx/thud1.mp3'),
@@ -119,9 +112,6 @@ function Game:update(dt)
     else
         local x = math.random(32, Constants.GAME_WIDTH - 32)
         local y = math.random(32, Constants.GAME_HEIGHT - 32)
-        Egg(self.container, x, y)
-        Egg(self.container, x, y)
-        Egg(self.container, x, y)
         Egg(self.container, x, y)
         self.dustParticles:setPosition(x, y)
         self.dustParticles:emit(2)
@@ -232,7 +222,7 @@ function Game:draw()
     love.graphics.draw(self.appleParticles)
 
     local x = 16
-    love.graphics.draw(sprites.HEART, x, 3)
+    love.graphics.draw(Sprites.ui.HEART, x, 3)
     if self.lives <= 1 then
         self:outlinedText(self.lives, x + 15, 2 + math.sin(self.stats.time * 30))
         love.graphics.setColor(215, 83, 21)
@@ -243,7 +233,7 @@ function Game:draw()
     end
 
     x = x + 32
-    love.graphics.draw(sprites.COIN, x, 3 - self.moneyOffset)
+    love.graphics.draw(Sprites.ui.COIN, x, 3 - self.moneyOffset)
     self:outlinedText(self.money, x + 15, 2 - self.moneyOffset)
 
     if self.overlayPos > 0 then

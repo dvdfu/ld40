@@ -1,17 +1,16 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
+local Sprites = require 'src.Sprites'
 local Vector = require 'modules.hump.vector'
 
 local Boundary = Class.new()
 Boundary:include(Object)
 
-local SPRITE = love.graphics.newImage('res/img/boundary.png')
-
 function Boundary:init(container, x, y, w, h)
     self.size = Vector(w, h)
     Object.init(self, container, x + w / 2, y + h / 2)
-    self.anim = Animation(SPRITE, 4, 10)
+    self.anim = Animation(Sprites.object.GROUND, 4, 10)
 end
 
 function Boundary:newBody(world, x, y)

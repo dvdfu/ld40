@@ -30,4 +30,31 @@ return {
             IDLE = love.graphics.newImage('res/img/pet/mollusk.png'),
         },
     },
+    object = {
+        APPLE = love.graphics.newImage('res/img/apple.png'),
+        CRATE = love.graphics.newImage('res/img/apple_crate.png'),
+        EGG = love.graphics.newImage('res/img/egg.png'),
+        FIREBALL = love.graphics.newImage('res/img/fireball.png'),
+        GRASS = love.graphics.newImage('res/img/grass.png'),
+        GROUND = love.graphics.newImage('res/img/boundary.png'),
+        LAVA = love.graphics.newImage('res/img/lava.png'),
+        TOMBSTONE = love.graphics.newImage('res/img/tombstone.png'),
+    },
+    particle = {
+        APPLE = love.graphics.newImage('res/img/particles/apple.png'),
+        DUST = love.graphics.newImage('res/img/particles/dust.png'),
+        TEARS = love.graphics.newImage('res/img/particles/tears.png'),
+    },
+    ui = {
+        CLOSED = love.graphics.newImage('res/img/closed.png'),
+        LOGO = love.graphics.newImage('res/img/logo.png'),
+
+        CURSOR = love.graphics.newImage('res/img/cursor.png'),
+        CURSOR_DRAG = love.graphics.newImage('res/img/cursor_drag.png'),
+
+        HEART = love.graphics.newImage('res/img/heart.png'),
+        COIN = love.graphics.newImage('res/img/coin.png'),
+        PET = love.graphics.newImage('res/img/pet.png'),
+        TIME = love.graphics.newImage('res/img/time.png'),
+    },
 }

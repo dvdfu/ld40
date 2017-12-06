@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 
 local Fireball = Class.new()
@@ -10,7 +11,6 @@ local LIFETIME = 90
 local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPEED = 1
-local SPRITE = love.graphics.newImage('res/img/fireball.png')
 
 local sounds = {
     FIREBALL_SHOOT = love.audio.newSource('res/sfx/fireball_shoot.wav'),
@@ -20,7 +20,7 @@ local sounds = {
 function Fireball:init(container, x, y, direction)
     Object.init(self, container, x, y)
     self:addTag('fireball')
-    self.anim = Animation(SPRITE, 2, 5)
+    self.anim = Animation(Sprites.object.FIREBALL, 2, 5)
     self.body:setLinearVelocity(SPEED * direction, 0)
     self.timer = Timer()
     self.timer:after(LIFETIME, function() self:destroy() end)

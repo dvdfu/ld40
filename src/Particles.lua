@@ -1,8 +1,4 @@
-local sprites = {
-    APPLE = love.graphics.newImage('res/img/particles/apple.png'),
-    DUST = love.graphics.newImage('res/img/particles/dust.png'),
-    TEARS = love.graphics.newImage('res/img/particles/tears.png'),
-}
+local Sprites = require 'src.Sprites'
 
 local function getQuads(n, w, h)
     local quads = {}
@@ -14,7 +10,7 @@ end
 
 return {
     newApple = function()
-        local ps = love.graphics.newParticleSystem(sprites.APPLE)
+        local ps = love.graphics.newParticleSystem(Sprites.particle.APPLE)
         ps:setAreaSpread('uniform', 8, 8)
         ps:setOffset(3, 3)
         ps:setParticleLifetime(10, 20)
@@ -24,7 +20,7 @@ return {
         return ps
     end,
     newDust = function()
-        local ps = love.graphics.newParticleSystem(sprites.DUST)
+        local ps = love.graphics.newParticleSystem(Sprites.particle.DUST)
         ps:setAreaSpread('uniform', 4, 4)
         ps:setOffset(8, 8)
         ps:setParticleLifetime(10)
@@ -34,7 +30,7 @@ return {
         return ps
     end,
     newTears = function()
-        local ps = love.graphics.newParticleSystem(sprites.TEARS)
+        local ps = love.graphics.newParticleSystem(Sprites.particle.TEARS)
         ps:setAreaSpread('uniform', 8, 0)
         ps:setDirection(-math.pi / 2)
         ps:setLinearAcceleration(0, 0.1)

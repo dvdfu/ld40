@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 
 local Tombstone = Class.new()
@@ -7,7 +8,6 @@ Tombstone:include(Object)
 
 local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
-local SPRITE = love.graphics.newImage('res/img/tombstone.png')
 
 function Tombstone:init(container, x, y)
     Object.init(self, container, x, y)
@@ -38,7 +38,7 @@ end
 function Tombstone:draw()
     local x = self.body:getX()
     local y = self.body:getY() - self.offset + 8
-    love.graphics.draw(SPRITE, x, y, 0, self.xScale, self.yScale, 8, 16)
+    love.graphics.draw(Sprites.object.TOMBSTONE, x, y, 0, self.xScale, self.yScale, 8, 16)
 end
 
 function Tombstone:getDrawOrder()

@@ -3,6 +3,7 @@ local Class = require 'modules.hump.class'
 local Particles = require 'src.Particles'
 local Selectable = require 'src.objects.Selectable'
 local Signal = require 'modules.hump.signal'
+local Sprites = require 'src.Sprites'
 local Squishable = require 'src.Squishable'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
@@ -11,9 +12,7 @@ local Pet = Class.new()
 Pet:include(Selectable)
 Pet:include(Squishable)
 
-local HEART_SPRITE = love.graphics.newImage('res/img/heart.png')
 local SHAPE = love.physics.newRectangleShape(16, 16)
-local SPRITE = love.graphics.newImage('res/img/pet/default.png')
 local SPRITE_OFFSET = Vector(8, 8)
 local TIME_RESET = 60 * 18
 local TIME_CRY = 60 * 6
@@ -170,7 +169,7 @@ function Pet:draw()
     self.anim:draw(x, y, 0, sx * self.direction, sy, SPRITE_OFFSET.x, SPRITE_OFFSET.y)
     love.graphics.draw(self.tears)
     if self:iconVisible() then
-        love.graphics.draw(HEART_SPRITE, x, y - 8 + self.iconOffset * 16, 0, sx, sy, 5.5, 9)
+        love.graphics.draw(Sprites.ui.HEART, x, y - 8 + self.iconOffset * 16, 0, sx, sy, 5.5, 9)
     end
 end
 

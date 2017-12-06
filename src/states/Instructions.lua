@@ -1,18 +1,9 @@
 local Animation = require 'src.Animation'
 local Constants = require 'src.Constants'
 local Gamestate = require 'modules.hump.gamestate'
+local Sprites = require 'src.Sprites'
 
 local Instructions = {}
-
-local sprites = {
-    amanita = love.graphics.newImage('res/img/pet/amanita.png'),
-    chin = love.graphics.newImage('res/img/pet/chin.png'),
-    dasher = love.graphics.newImage('res/img/pet/dasher.png'),
-    dragon = love.graphics.newImage('res/img/pet/dragon.png'),
-    ferro = love.graphics.newImage('res/img/pet/ferro.png'),
-    lumpy = love.graphics.newImage('res/img/pet/lumpy.png'),
-    mollusk = love.graphics.newImage('res/img/pet/mollusk.png'),
-}
 
 local quirks = {
     amanita = "Likes having friends",
@@ -27,13 +18,13 @@ local quirks = {
 function Instructions:enter(previous)
     self.previous = previous
     self.petAnims = {
-        amanita = Animation(sprites.amanita, 2, 10),
-        chin = Animation(sprites.chin, 2, 10),
-        dasher = Animation(sprites.dasher, 2, 10),
-        dragon = Animation(sprites.dragon, 2, 10),
-        ferro = Animation(sprites.ferro, 2, 10),
-        lumpy = Animation(sprites.lumpy, 2, 10),
-        mollusk = Animation(sprites.mollusk, 2, 10),
+        amanita = Animation(Sprites.pet.amanita.IDLE, 2, 10),
+        chin = Animation(Sprites.pet.chin.IDLE, 2, 10),
+        dasher = Animation(Sprites.pet.dasher.IDLE, 2, 10),
+        dragon = Animation(Sprites.pet.dragon.IDLE, 2, 10),
+        ferro = Animation(Sprites.pet.ferro.IDLE, 2, 10),
+        lumpy = Animation(Sprites.pet.lumpy.IDLE, 2, 10),
+        mollusk = Animation(Sprites.pet.mollusk.IDLE, 2, 10),
     }
 end
 

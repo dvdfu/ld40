@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Object = require 'src.Object'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 
 local Lava = Class.new()
@@ -10,12 +11,11 @@ local LIFETIME = 150
 local RADIUS = 4
 local SHAPE = love.physics.newCircleShape(RADIUS)
 local SPEED = 1
-local SPRITE = love.graphics.newImage('res/img/lava.png')
 
 function Lava:init(container, x, y)
     Object.init(self, container, x, y)
     self:addTag('lava')
-    self.anim = Animation(SPRITE, 4, 10)
+    self.anim = Animation(Sprites.object.LAVA, 4, 10)
     self.timer = Timer()
     self.timer:after(LIFETIME, function() self:destroy() end)
 end

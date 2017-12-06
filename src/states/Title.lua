@@ -1,12 +1,9 @@
 local Animation = require 'src.Animation'
 local Constants = require 'src.Constants'
 local Gamestate = require 'modules.hump.gamestate'
+local Sprites = require 'src.Sprites'
 
 local Title = {}
-
-local sprites = {
-    LOGO = love.graphics.newImage('res/img/logo.png'),
-}
 
 function Title:init()
     local font = love.graphics.newFont('res/font/redalert.ttf', 13)
@@ -14,7 +11,7 @@ function Title:init()
 end
 
 function Title:enter()
-    self.anim = Animation(sprites.LOGO, 3, 6)
+    self.anim = Animation(Sprites.ui.LOGO, 3, 6)
 end
 
 function Title:update(dt)
