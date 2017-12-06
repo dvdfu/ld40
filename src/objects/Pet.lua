@@ -20,11 +20,23 @@ local TIME_RESET = 60 * 18
 local TIME_CRY = 60 * 6
 local TIME_BAWL = 60 * 2
 
+local DEFAULT_PROPS = {
+    dragSpeedMax = 30,
+    immuneFireball = false,
+    immuneLava = false,
+    immuneSpike = false,
+    payout = 1,
+}
+
 function Pet:init(container, x, y, props)
+    props = props or {}
+    for key, value in pairs(DEFAULT_PROPS) do
+        if not props[key] then props[key] = value end
+    end
     Selectable.init(self, container, x, y)
     Squishable.init(self)
     self:addTag('pet')
-    self.props = props or {}
+    self.props = props
     self.direction = 1
 
     self.moneyTimer = Timer()
@@ -87,12 +99,12 @@ end
 
 function Pet:collide(col, other, fixture)
     if fixture:getUserData() == 'body' then
-        if other:hasTag('fireball') and not self.props.fireballImmune then
+        if other:hasTag('fireball') and not self.props.immuneFireball then
             other:destroy()
             self:destroy()
-        elseif other:hasTag('lava') and not self.props.lavaImmune then
+        elseif other:hasTag('lava') and not self.props.immuneLava then
             self:destroy()
-        elseif other:hasTag('ferro') and not self.props.spikeImmune then
+        elseif other:hasTag('ferro') and not self.props.immuneSpike then
             self:destroy()
         elseif other:hasTag('grass') then
             local vx, vy = self.body:getLinearVelocity()
@@ -108,6 +120,10 @@ end
 function Pet:select()
     Selectable.select(self)
     self:squish()
+end
+
+function Pet:getMaxDragSpeed()
+    return self.props.dragSpeedMax
 end
 
 function Pet:onCry() end

@@ -20,9 +20,9 @@ local sound = love.audio.newSource('res/sfx/lumpy.wav')
 
 function PetLumpy:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
-        fireballImmune = true,
-        lavaImmune = true,
-        spikeImmune = true,
+        immuneFireball = true,
+        immuneLava = true,
+        immuneSpike = true,
         payout = 0,
         wanderSpeed = 0.4,
         wanderDistanceMin = 24,

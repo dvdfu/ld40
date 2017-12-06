@@ -6,7 +6,21 @@ local Vector = require 'modules.hump.vector'
 local WanderingPet = Class.new()
 WanderingPet:include(Pet)
 
+local DEFAULT_PROPS = {
+    wanderSpeed = 1,
+    wanderDistanceMin = 100,
+    wanderDistanceMax = 100,
+    wanderDelayMin = 100,
+    wanderDelayMax = 100,
+}
+
 function WanderingPet:init(container, x, y, props)
+    props = props or {}
+    for key, value in pairs(DEFAULT_PROPS) do
+        if not props[key] then
+            props[key] = value
+        end
+    end
     Pet.init(self, container, x, y, props)
     self.moveTimer = Timer()
     self.moveTarget = nil
@@ -40,18 +54,6 @@ function WanderingPet:relocate()
     self.moveTimer:clear()
     local wanderDelay = math.random(self.props.wanderDelayMin, self.props.wanderDelayMax)
     self.moveTimer:after(wanderDelay, function() self:relocate() end)
-end
-
-function WanderingPet:getWanderSpeed()
-    return 0.5
-end
-
-function WanderingPet:getWanderDistance()
-    return math.random(16, 64)
-end
-
-function WanderingPet:getWanderDelay()
-    return math.random(100, 300)
 end
 
 return WanderingPet

@@ -16,7 +16,7 @@ local sound = love.audio.newSource('res/sfx/dragon.wav')
 
 function PetDragon:init(container, x, y)
     Pet.init(self, container, x, y, {
-        fireballImmune = true,
+        immuneFireball = true,
         payout = 2,
     })
     self:addTag('dragon')

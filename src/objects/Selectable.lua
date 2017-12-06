@@ -37,7 +37,7 @@ function Selectable:drag(x, y)
 end
 
 function Selectable:getMaxDragSpeed()
-    return 10
+    return 30
 end
 
 return Selectable

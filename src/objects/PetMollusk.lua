@@ -14,7 +14,8 @@ local sound = love.audio.newSource('res/sfx/mollusk.wav')
 
 function PetMollusk:init(container, x, y)
     Pet.init(self, container, x, y, {
-        spikeImmune = true,
+        dragSpeedMax = 1,
+        immuneSpike = true,
         payout = 2,
     })
     self:addTag('mollusk')
@@ -37,10 +38,6 @@ function PetMollusk:collide(col, other, fixture)
         other:destroy()
         self:resetTime()
     end
-end
-
-function PetMollusk:getMaxDragSpeed()
-    return 1
 end
 
 function PetMollusk:getSound()

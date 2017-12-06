@@ -28,10 +28,6 @@ function Apple:collide(col, other, fixture)
     end
 end
 
-function Apple:getMaxDragSpeed()
-    return 30
-end
-
 function Apple:draw()
     love.graphics.draw(SPRITE, self.body:getX(), self.body:getY(), 0, 1, 1, 8, 8)
 end

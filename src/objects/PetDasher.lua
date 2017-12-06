@@ -20,7 +20,7 @@ local sound = love.audio.newSource('res/sfx/dasher.wav')
 
 function PetDasher:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
-        lavaImmune = true,
+        immuneLava = true,
         payout = 2,
         wanderSpeed = 0.5,
         wanderDistanceMin = 64,
