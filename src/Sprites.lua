@@ -38,6 +38,7 @@ return {
         GRASS = love.graphics.newImage('res/img/grass.png'),
         GROUND = love.graphics.newImage('res/img/boundary.png'),
         LAVA = love.graphics.newImage('res/img/lava.png'),
+        NEST = love.graphics.newImage('res/img/nest.png'),
         TOMBSTONE = love.graphics.newImage('res/img/tombstone.png'),
     },
     particle = {

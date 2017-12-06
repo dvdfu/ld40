@@ -12,12 +12,12 @@ local AppleCrate = require 'src.objects.AppleCrate'
 local Boundary   = require 'src.objects.Boundary'
 local Egg        = require 'src.objects.Egg'
 local Grass      = require 'src.objects.Grass'
+local Nest       = require 'src.objects.Nest'
 local Tombstone  = require 'src.objects.Tombstone'
 
 local Game = {}
 
-local NEXT_PET_TIME = 180
-local NEXT_PET_TIME_MAX = 540
+local MAX_AUTO_PETS = 8
 local LIFE_COST = 150
 
 local function help()
@@ -36,6 +36,7 @@ function Game:enter()
     self.gameOver = false
     self.selection = nil
     self.lives = 5
+    self.level = 0
     self.money = 10
     self.pets = 0
     self.stats = {
@@ -48,8 +49,12 @@ function Game:enter()
     self.overlayPos = 1
     self.overlayTimer = Timer()
     self.overlayTimer:tween(30, self, {overlayPos = 0}, 'in-cubic')
-    self.nextPetDelay = NEXT_PET_TIME
-    self.nextPetTimer = Timer()
+    self.nextEggTimer = Timer()
+    self.nextEggTimer:every(480, function()
+        local x = math.random(32, Constants.GAME_WIDTH - 32)
+        local y = math.random(32, Constants.GAME_HEIGHT - 32)
+        self:spawnEgg(x, y)
+    end)
 
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
@@ -95,9 +100,13 @@ function Game:enter()
     Boundary(self.container, 16, Constants.GAME_HEIGHT - 16, Constants.GAME_WIDTH - 32, 16) -- bottom
 
     AppleCrate(self.container, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT - 48)
+    Nest(self.container, Constants.GAME_WIDTH / 2, 48)
 
     help()
-    self:spawnPet()
+
+    local x = math.random(32, Constants.GAME_WIDTH - 32)
+    local y = math.random(32, Constants.GAME_HEIGHT - 32)
+    self:spawnEgg(x, y)
 end
 
 function Game:update(dt)
@@ -110,31 +119,24 @@ function Game:update(dt)
     else
         self.stats.time = self.stats.time + dt
     end
-
     self.container:update(mdt)
-    self.nextPetTimer:update(mdt)
+    if self.pets < MAX_AUTO_PETS + self.level then
+        self.nextEggTimer:update(mdt)
+    end
     self.appleParticles:update(mdt)
     self.dustParticles:update(mdt)
     self.explosionParticles:update(mdt)
-
     self.moneyOffsetTimer:update(dt)
     self.overlayTimer:update(dt)
 end
 
-function Game:spawnPet()
-    local x = math.random(32, Constants.GAME_WIDTH - 32)
-    local y = math.random(32, Constants.GAME_HEIGHT - 32)
-    Egg(self.container, x, y)
+function Game:spawnEgg(x, y)
+    local egg = Egg(self.container, x, y)
     self.dustParticles:setPosition(x, y)
     self.dustParticles:emit(2)
     self.pets = self.pets + 1
     self.stats.totalPets = self.stats.totalPets + 1
-
-    self.nextPetDelay = self.nextPetDelay + 60
-    if self.nextPetDelay > NEXT_PET_TIME_MAX then
-        self.nextPetDelay = NEXT_PET_TIME_MAX
-    end
-    self.nextPetTimer:after(self.nextPetDelay, function() self:spawnPet() end)
+    return egg
 end
 
 function Game:onLoseLife()
@@ -168,6 +170,7 @@ function Game:buyLife()
     if self.money < LIFE_COST then return end
     self.money = self.money - LIFE_COST
     self.lives = self.lives + 1
+    self.level = self.level + 1
 end
 
 function Game:buyApple(crate)
@@ -193,10 +196,14 @@ function Game:mousepressed(x, y)
         if object:hasTag('selectable') and object:contains(x, y) then
             object:select()
             self.selection = object
-            return
         elseif object:hasTag('crate') and object:contains(x, y) then
             self:buyApple(object)
-            return
+        elseif object:hasTag('nest') and object:contains(x, y) then
+            if self.selection then self.selection:unselect() end
+            local x, y = Constants.GAME_WIDTH / 2 + math.random(), 48 + math.random()
+            local egg = self:spawnEgg(x, y)
+            egg:select()
+            self.selection = egg
         end
     end)
 end
