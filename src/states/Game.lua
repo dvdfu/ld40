@@ -52,6 +52,7 @@ function Game:enter()
 
     self.appleParticles = Particles.newApple()
     self.dustParticles = Particles.newDust()
+    self.explosionParticles = Particles.newExplosion()
 
     self.container = Container(function(object)
         local x, y = object:getPosition():unpack()
@@ -69,6 +70,8 @@ function Game:enter()
             self.pets = self.pets - 1
             self.dustParticles:setPosition(x, y)
             self.dustParticles:emit(2)
+            self.explosionParticles:setPosition(x, y)
+            self.explosionParticles:emit(1)
             if not object:hasTag('lumpy') then
                 Tombstone(self.container, x, y)
             end
@@ -100,13 +103,21 @@ function Game:update(dt)
     if self.selection then
         self.selection:drag(mousePosition:unpack())
     end
-    self.container:update(dt)
-    self.appleParticles:update(dt)
-    self.dustParticles:update(dt)
+    local mdt = dt
+    if self.gameOver then
+        mdt = dt / 4
+    else
+        self.stats.time = self.stats.time + dt
+    end
+
+    self.container:update(mdt)
+    self.nextPetTimer:update(mdt)
+    self.appleParticles:update(mdt)
+    self.dustParticles:update(mdt)
+    self.explosionParticles:update(mdt)
+
     self.moneyOffsetTimer:update(dt)
-    self.nextPetTimer:update(dt)
     self.overlayTimer:update(dt)
-    self.stats.time = self.stats.time + 1 / 60
 end
 
 function Game:spawnPet()
@@ -132,10 +143,12 @@ function Game:onLoseLife()
     elseif not self.gameOver then
         self.gameOver = true
         self.lives = 0
-        self.overlayPos = 0
-        self.overlayTimer:tween(120, self, {overlayPos = 1}, 'in-bounce', function()
-            local Results = require 'src.states.Results'
-            Gamestate.switch(Results, self.stats)
+        self.overlayTimer:after(180, function()
+            self.overlayPos = 0
+            self.overlayTimer:tween(120, self, {overlayPos = 1}, 'in-bounce', function()
+                local Results = require 'src.states.Results'
+                Gamestate.switch(Results, self.stats)
+            end)
         end)
     end
 end
@@ -211,13 +224,14 @@ function Game:draw()
 
     love.graphics.draw(self.dustParticles)
     love.graphics.draw(self.appleParticles)
+    love.graphics.draw(self.explosionParticles)
 
     local x = 16
     love.graphics.draw(Sprites.ui.HEART, x, 3)
     if self.lives <= 1 then
-        outlinedText(self.lives, x + 15, 2 + math.sin(self.stats.time * 30))
+        outlinedText(self.lives, x + 15, 2 + math.sin(self.stats.time / 2))
         love.graphics.setColor(215, 83, 21)
-        love.graphics.print(self.lives, x + 15, 2 + math.sin(self.stats.time * 30))
+        love.graphics.print(self.lives, x + 15, 2 + math.sin(self.stats.time / 2))
         love.graphics.setColor(255, 255, 255)
     else
         outlinedText(self.lives, x + 15, 2)

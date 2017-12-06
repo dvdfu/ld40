@@ -51,7 +51,7 @@ function Results:draw()
 
     y = y + 16
     love.graphics.draw(Sprites.ui.TIME, x, y)
-    local seconds = math.ceil(self.stats.time)
+    local seconds = math.ceil(self.stats.time / 60)
     local minutes = math.floor(seconds / 60)
     seconds = seconds % 60
     local time = minutes .. ':' .. seconds .. (seconds < 10 and '0' or '')

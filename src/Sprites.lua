@@ -43,6 +43,7 @@ return {
     particle = {
         APPLE = love.graphics.newImage('res/img/particles/apple.png'),
         DUST = love.graphics.newImage('res/img/particles/dust.png'),
+        EXPLOSION = love.graphics.newImage('res/img/particles/explosion.png'),
         TEARS = love.graphics.newImage('res/img/particles/tears.png'),
     },
     ui = {

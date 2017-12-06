@@ -29,6 +29,13 @@ return {
         ps:setSpread(math.pi)
         return ps
     end,
+    newExplosion = function()
+        local ps = love.graphics.newParticleSystem(Sprites.particle.EXPLOSION)
+        ps:setOffset(24, 44)
+        ps:setParticleLifetime(30)
+        ps:setQuads(getQuads(5, 48, 48))
+        return ps
+    end,
     newTears = function()
         local ps = love.graphics.newParticleSystem(Sprites.particle.TEARS)
         ps:setAreaSpread('uniform', 8, 0)
