@@ -13,7 +13,9 @@ local sound = love.audio.newSource('res/sfx/ferro.wav')
 
 function PetFerro:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
+        appleEater = true,
         payout = 3,
+        sound = sound,
         wanderSpeed = 1,
         wanderDistanceMin = 80,
         wanderDistanceMax = 80,
@@ -31,18 +33,6 @@ function PetFerro:newBody(world, x, y)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
     return body
-end
-
-function PetFerro:collide(col, other, fixture)
-    WanderingPet.collide(self, col, other, fixture)
-    if other:hasTag('apple') then
-        other:destroy()
-        self:resetTime()
-    end
-end
-
-function PetFerro:getSound()
-    return sound
 end
 
 return PetFerro

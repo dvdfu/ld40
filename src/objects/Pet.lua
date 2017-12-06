@@ -99,12 +99,15 @@ end
 
 function Pet:collide(col, other, fixture)
     if fixture:getUserData() == 'body' then
-        if other:hasTag('fireball') and not self.props.immuneFireball then
+        if self.props.appleEater and other:hasTag('apple') and not other:isDestroyed() then
+            other:destroy()
+            self:resetTime()
+        elseif not self.props.immuneFireball and other:hasTag('fireball') then
             other:destroy()
             self:destroy()
-        elseif other:hasTag('lava') and not self.props.immuneLava then
+        elseif not self.props.immuneLava and other:hasTag('lava') then
             self:destroy()
-        elseif other:hasTag('ferro') and not self.props.immuneSpike then
+        elseif not self.props.immuneSpike and other:hasTag('ferro') then
             self:destroy()
         elseif other:hasTag('grass') then
             local vx, vy = self.body:getLinearVelocity()
@@ -151,11 +154,10 @@ function Pet:shout(pitch)
         local a = 1.0595
         pitch = 1 / a + math.random() * (a - 1 / a)
     end
-    local sound = self:getSound()
-    sound:stop()
-    sound:setPitch(pitch)
-    sound:play()
-    sound:setPitch(1)
+    self.props.sound:stop()
+    self.props.sound:setPitch(pitch)
+    self.props.sound:play()
+    self.props.sound:setPitch(1)
 end
 
 function Pet:draw()

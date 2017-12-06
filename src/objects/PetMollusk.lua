@@ -14,9 +14,11 @@ local sound = love.audio.newSource('res/sfx/mollusk.wav')
 
 function PetMollusk:init(container, x, y)
     Pet.init(self, container, x, y, {
+        appleEater = true,
         dragSpeedMax = 1,
         immuneSpike = true,
         payout = 2,
+        sound = sound,
     })
     self:addTag('mollusk')
     self.anim = Animation(SPRITE, 2, 10)
@@ -30,18 +32,6 @@ function PetMollusk:newBody(world, x, y)
     local fixture = love.physics.newFixture(body, SHAPE)
     fixture:setUserData('body')
     return body
-end
-
-function PetMollusk:collide(col, other, fixture)
-    Pet.collide(self, col, other, fixture)
-    if other:hasTag('apple') then
-        other:destroy()
-        self:resetTime()
-    end
-end
-
-function PetMollusk:getSound()
-    return sound
 end
 
 return PetMollusk

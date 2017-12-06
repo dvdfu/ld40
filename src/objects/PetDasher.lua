@@ -22,6 +22,7 @@ function PetDasher:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
         immuneLava = true,
         payout = 2,
+        sound = sound,
         wanderSpeed = 0.5,
         wanderDistanceMin = 64,
         wanderDistanceMax = 128,
@@ -72,10 +73,6 @@ end
 function PetDasher:select()
     WanderingPet.select(self)
     self:resetTime()
-end
-
-function PetDasher:getSound()
-    return sound
 end
 
 return PetDasher

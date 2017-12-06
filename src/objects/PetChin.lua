@@ -23,7 +23,9 @@ local sound = love.audio.newSource('res/sfx/chin.wav')
 
 function PetChin:init(container, x, y)
     Pet.init(self, container, x, y, {
+        appleEater = true,
         payout = 2,
+        sound = sound,
     })
     self:addTag('chin')
     self.animIdle = Animation(sprites.idle, 2, 10)
@@ -58,12 +60,11 @@ end
 
 function PetChin:collide(col, other, fixture)
     Pet.collide(self, col, other, fixture)
-    if other:hasTag('apple') and not other:isDestroyed() then
-        if fixture:getUserData() == 'snag' then
+    if fixture:getUserData() == 'snag' then
+        if other:hasTag('apple') and not other:isDestroyed() then
             self:snag(other:getPosition())
+            other:destroy()
         end
-        other:destroy()
-        self:resetTime()
     end
 end
 
@@ -85,10 +86,6 @@ function PetChin:draw()
         love.graphics.draw(sprites.tongueBody, pos.x, pos.y, delta:angleTo(), delta:len() / 6, 1, 0, 3)
         love.graphics.draw(sprites.tongueTip, pos.x + delta.x, pos.y + delta.y, 0, 1, 1, 3, 3)
     end
-end
-
-function PetChin:getSound()
-    return sound
 end
 
 return PetChin

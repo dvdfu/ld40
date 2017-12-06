@@ -24,6 +24,7 @@ function PetLumpy:init(container, x, y)
         immuneLava = true,
         immuneSpike = true,
         payout = 0,
+        sound = sound,
         wanderSpeed = 0.4,
         wanderDistanceMin = 24,
         wanderDistanceMax = 40,
@@ -78,9 +79,6 @@ function PetLumpy:scareSelf()
         self.tears:setPosition(x, y - 4)
         self.tears:emit(4)
     end)
-end
-function PetLumpy:getSound()
-    return sound
 end
 
 return PetLumpy

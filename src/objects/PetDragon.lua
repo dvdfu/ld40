@@ -16,8 +16,10 @@ local sound = love.audio.newSource('res/sfx/dragon.wav')
 
 function PetDragon:init(container, x, y)
     Pet.init(self, container, x, y, {
+        appleEater = true,
         immuneFireball = true,
         payout = 2,
+        sound = sound,
     })
     self:addTag('dragon')
     self.anim = Animation(SPRITE, 2, 10)
@@ -41,24 +43,12 @@ function PetDragon:update(dt)
     end
 end
 
-function PetDragon:collide(col, other, fixture)
-    Pet.collide(self, col, other, fixture)
-    if other:hasTag('apple') then
-        other:destroy()
-        self:resetTime()
-    end
-end
-
 function PetDragon:breathFire()
     local x = self.body:getX() + self.direction * 8
     local y = self.body:getY() + 1
     local fireball = Fireball(self.container, x, y, self.direction)
     self.direction = -self.direction
     self:squish()
-end
-
-function PetDragon:getSound()
-    return sound
 end
 
 return PetDragon
