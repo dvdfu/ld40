@@ -40,9 +40,9 @@ end
 
 function Nest:draw()
     local x = self.body:getX()
-    local y = self.body:getY() + 12
+    local y = self.body:getY()
     local sx, sy = self:getSquish()
-    love.graphics.draw(Sprites.object.NEST, x, y, 0, sx, sy, 16, 24)
+    love.graphics.draw(Sprites.object.NEST, x, y, 0, sx, sy, 16, 16)
 end
 
 function Nest:getDrawOrder()

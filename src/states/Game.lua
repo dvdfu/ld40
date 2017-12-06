@@ -13,12 +13,29 @@ local Boundary   = require 'src.objects.Boundary'
 local Egg        = require 'src.objects.Egg'
 local Grass      = require 'src.objects.Grass'
 local Nest       = require 'src.objects.Nest'
+local PetAmanita = require 'src.objects.PetAmanita'
+local PetChin    = require 'src.objects.PetChin'
+local PetDasher  = require 'src.objects.PetDasher'
+local PetDragon  = require 'src.objects.PetDragon'
+local PetLumpy   = require 'src.objects.PetLumpy'
+local PetFerro   = require 'src.objects.PetFerro'
+local PetMollusk = require 'src.objects.PetMollusk'
 local Tombstone  = require 'src.objects.Tombstone'
 
 local Game = {}
 
 local MAX_AUTO_PETS = 8
 local LIFE_COST = 150
+
+local pets = {
+    PetAmanita,
+    PetChin,
+    PetDasher,
+    PetDragon,
+    PetLumpy,
+    PetFerro,
+    PetMollusk,
+}
 
 local function help()
     local Instructions = require 'src.states.Instructions'
@@ -70,6 +87,14 @@ function Game:enter()
             self.appleParticles:setPosition(x, y)
             self.appleParticles:emit(10)
         elseif object:hasTag('egg') then
+            self.pets = self.pets + 1
+            self.stats.totalPets = self.stats.totalPets + 1
+            local type = math.random(1, #pets)
+            local Pet = pets[type]
+            if type == 1 then
+                Pet(self.container, x, y)
+            end
+            Pet(self.container, x, y)
             self.dustParticles:setPosition(x, y)
             self.dustParticles:emit(4)
         elseif object:hasTag('pet') then
@@ -134,8 +159,6 @@ function Game:spawnEgg(x, y)
     local egg = Egg(self.container, x, y)
     self.dustParticles:setPosition(x, y)
     self.dustParticles:emit(2)
-    self.pets = self.pets + 1
-    self.stats.totalPets = self.stats.totalPets + 1
     return egg
 end
 
@@ -199,6 +222,7 @@ function Game:mousepressed(x, y)
         elseif object:hasTag('crate') and object:contains(x, y) then
             self:buyApple(object)
         elseif object:hasTag('nest') and object:contains(x, y) then
+            object:onClick()
             if self.selection then self.selection:unselect() end
             local x, y = Constants.GAME_WIDTH / 2 + math.random(), 48 + math.random()
             local egg = self:spawnEgg(x, y)
