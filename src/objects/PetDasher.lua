@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Lava = require 'src.objects.Lava'
+local Sounds = require 'src.Sounds'
 local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 local WanderingPet = require 'src.objects.WanderingPet'
@@ -10,14 +11,12 @@ PetDasher:include(WanderingPet)
 
 local SHAPE = love.physics.newCircleShape(6)
 
-local sound = love.audio.newSource('res/sfx/dasher.wav')
-
 function PetDasher:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
         damping = 0.1,
         immuneLava = true,
         payout = 2,
-        sound = sound,
+        sound = Sounds.pet.DASHER,
         wanderSpeed = 0.5,
         wanderDistanceMin = 64,
         wanderDistanceMax = 128,

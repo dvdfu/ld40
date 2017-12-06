@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Pet = require 'src.objects.Pet'
+local Sounds = require 'src.Sounds'
 local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
@@ -12,13 +13,11 @@ local SHAPE = love.physics.newCircleShape(6)
 local SNAG_LENGTH = 32
 local SNAG_SHAPE = love.physics.newCircleShape(SNAG_LENGTH)
 
-local sound = love.audio.newSource('res/sfx/chin.wav')
-
 function PetChin:init(container, x, y)
     Pet.init(self, container, x, y, {
         appleEater = true,
         payout = 2,
-        sound = sound,
+        sound = Sounds.pet.CHIN,
     })
     self:addTag('chin')
     self.animIdle = Animation(Sprites.pet.chin.IDLE, 2, 10)

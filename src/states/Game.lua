@@ -5,6 +5,7 @@ local Vector     = require 'modules.hump.vector'
 local Constants  = require 'src.Constants'
 local Container  = require 'src.Container'
 local Particles  = require 'src.Particles'
+local Sounds     = require 'src.Sounds'
 local Sprites    = require 'src.Sprites'
 local Apple      = require 'src.objects.Apple'
 local AppleCrate = require 'src.objects.AppleCrate'
@@ -17,11 +18,6 @@ local Game = {}
 
 local NEXT_PET_TIME = 180
 local NEXT_PET_TIME_MAX = 540
-
-local sounds = {
-    THUD_1 = love.audio.newSource('res/sfx/thud1.mp3'),
-    DIE = love.audio.newSource('res/sfx/die.wav'),
-}
 
 function Game:init()
     local font = love.graphics.newFont('res/font/redalert.ttf', 13)
@@ -128,7 +124,7 @@ function Game:update(dt)
 end
 
 function Game:onLoseLife()
-    sounds.DIE:play()
+    Sounds.ui.DIE:play()
     if self.lives > 1 then
         self.lives = self.lives - 1
     elseif not self.gameOver then
@@ -199,7 +195,7 @@ function Game:mousereleased(x, y)
     if self.selection then
         self.selection:unselect()
         self.selection = nil
-        sounds.THUD_1:play()
+        Sounds.ui.THUD_1:play()
     end
 end
 

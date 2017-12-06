@@ -1,5 +1,6 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
+local Sounds = require 'src.Sounds'
 local Sprites = require 'src.Sprites'
 local WanderingPet = require 'src.objects.WanderingPet'
 
@@ -8,13 +9,11 @@ PetFerro:include(WanderingPet)
 
 local SHAPE = love.physics.newCircleShape(6)
 
-local sound = love.audio.newSource('res/sfx/ferro.wav')
-
 function PetFerro:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
         appleEater = true,
         payout = 3,
-        sound = sound,
+        sound = Sounds.pet.FERRO,
         wanderSpeed = 1,
         wanderDistanceMin = 80,
         wanderDistanceMax = 80,

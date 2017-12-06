@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Pet = require 'src.objects.Pet'
+local Sounds = require 'src.Sounds'
 local Sprites = require 'src.Sprites'
 
 local PetMollusk = Class.new()
@@ -8,7 +9,6 @@ PetMollusk:include(Pet)
 
 local MASS = 100
 local SHAPE = love.physics.newCircleShape(6)
-local sound = love.audio.newSource('res/sfx/mollusk.wav')
 
 function PetMollusk:init(container, x, y)
     Pet.init(self, container, x, y, {
@@ -16,7 +16,7 @@ function PetMollusk:init(container, x, y)
         dragSpeedMax = 1,
         immuneSpike = true,
         payout = 2,
-        sound = sound,
+        sound = Sounds.pet.MOLLUSK,
     })
     self:addTag('mollusk')
     self.anim = Animation(Sprites.pet.mollusk.IDLE, 2, 10)

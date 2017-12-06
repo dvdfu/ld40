@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Selectable = require 'src.objects.Selectable'
+local Sounds = require 'src.Sounds'
 local Sprites = require 'src.Sprites'
 
 local Apple = Class.new()
@@ -8,7 +9,6 @@ Apple:include(Selectable)
 local DAMPING = 1
 local RADIUS = 6
 local SHAPE = love.physics.newCircleShape(RADIUS)
-local sound = love.audio.newSource('res/sfx/pop.mp3')
 
 function Apple:init(container, x, y)
     Selectable.init(self, container, x, y)
@@ -31,7 +31,7 @@ end
 
 function Apple:select()
     Selectable.select(self)
-    sound:play()
+    Sounds.object.APPLE:play()
 end
 
 function Apple:draw()

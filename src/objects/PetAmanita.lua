@@ -1,5 +1,6 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
+local Sounds = require 'src.Sounds'
 local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 local WanderingPet = require 'src.objects.WanderingPet'
@@ -9,13 +10,11 @@ PetAmanita:include(WanderingPet)
 
 local SHAPE = love.physics.newCircleShape(6)
 
-local sound = love.audio.newSource('res/sfx/amanita.wav')
-
 function PetAmanita:init(container, x, y)
     WanderingPet.init(self, container, x, y, {
         damping = 0.3,
         payout = 1,
-        sound = sound,
+        sound = Sounds.pet.AMANITA,
         wanderSpeed = 0.5,
         wanderDistanceMin = 4,
         wanderDistanceMax = 20,
