@@ -17,11 +17,10 @@ local sounds = {
     FIREBALL_HIT = love.audio.newSource('res/sfx/fireball_hit.wav'),
 }
 
-function Fireball:init(container, x, y, faceRight)
+function Fireball:init(container, x, y, direction)
     Object.init(self, container, x, y)
     self:addTag('fireball')
     self.anim = Animation(SPRITE, 2, 5)
-    local direction = faceRight and 1 or -1
     self.body:setLinearVelocity(SPEED * direction, 0)
     self.timer = Timer()
     self.timer:after(LIFETIME, function() self:destroy() end)

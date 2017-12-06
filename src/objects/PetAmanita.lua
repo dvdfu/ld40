@@ -17,7 +17,14 @@ local sprites = {
 local sound = love.audio.newSource('res/sfx/amanita.wav')
 
 function PetAmanita:init(container, x, y)
-    WanderingPet.init(self, container, x, y)
+    WanderingPet.init(self, container, x, y, {
+        payout = 1,
+        wanderSpeed = 0.5,
+        wanderDistanceMin = 4,
+        wanderDistanceMax = 20,
+        wanderDelayMin = 60,
+        wanderDelayMax = 120,
+    })
     self:addTag('amanita')
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animHappy = Animation(sprites.happy, 2, 10)
@@ -52,26 +59,9 @@ function PetAmanita:onCry()
 end
 
 function PetAmanita:onHappy()
-    self:squish(1.4)
     self.anim = self.animHappy
     self.happyTimer:clear()
     self.happyTimer:after(60, function() self.anim = self.animIdle end)
-end
-
-function PetAmanita:getWanderSpeed()
-    return 0.5
-end
-
-function PetAmanita:getWanderDistance()
-    return math.random(4, 20)
-end
-
-function PetAmanita:getWanderDelay()
-    return math.random(60, 120)
-end
-
-function PetAmanita:getPayout()
-    return 1
 end
 
 function PetAmanita:getSound()

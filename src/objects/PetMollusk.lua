@@ -13,7 +13,10 @@ local SPRITE = love.graphics.newImage('res/img/pet/mollusk.png')
 local sound = love.audio.newSource('res/sfx/mollusk.wav')
 
 function PetMollusk:init(container, x, y)
-    Pet.init(self, container, x, y)
+    Pet.init(self, container, x, y, {
+        spikeImmune = true,
+        payout = 2,
+    })
     self:addTag('mollusk')
     self.anim = Animation(SPRITE, 2, 10)
 end
@@ -34,10 +37,6 @@ function PetMollusk:collide(col, other, fixture)
         other:destroy()
         self:resetTime()
     end
-end
-
-function PetMollusk:spikeImmune()
-    return true
 end
 
 function PetMollusk:getMaxDragSpeed()

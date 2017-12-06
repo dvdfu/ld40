@@ -19,7 +19,17 @@ local sprites = {
 local sound = love.audio.newSource('res/sfx/lumpy.wav')
 
 function PetLumpy:init(container, x, y)
-    WanderingPet.init(self, container, x, y)
+    WanderingPet.init(self, container, x, y, {
+        fireballImmune = true,
+        lavaImmune = true,
+        spikeImmune = true,
+        payout = 0,
+        wanderSpeed = 0.4,
+        wanderDistanceMin = 24,
+        wanderDistanceMax = 40,
+        wanderDelayMin = 90,
+        wanderDelayMax = 150,
+    })
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animScared = Animation(sprites.scared, 2, 5)
     self.anim = self.animIdle
@@ -59,30 +69,6 @@ function PetLumpy:collide(col, other, fixture)
     end
 end
 
-function PetLumpy:getWanderSpeed()
-    return 0.4
-end
-
-function PetLumpy:getWanderDistance()
-    return 32
-end
-
-function PetLumpy:getWanderDelay()
-    return math.random(90, 150)
-end
-
-function PetLumpy:fireballImmune()
-    return true
-end
-
-function PetLumpy:lavaImmune()
-    return true
-end
-
-function PetLumpy:spikeImmune()
-    return true
-end
-
 function PetLumpy:scareSelf()
     self.scared = true
     self.anim = self.animScared
@@ -93,11 +79,6 @@ function PetLumpy:scareSelf()
         self.tears:emit(4)
     end)
 end
-
-function PetLumpy:getPayout()
-    return 0
-end
-
 function PetLumpy:getSound()
     return sound
 end

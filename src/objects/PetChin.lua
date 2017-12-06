@@ -22,7 +22,9 @@ local sprites = {
 local sound = love.audio.newSource('res/sfx/chin.wav')
 
 function PetChin:init(container, x, y)
-    Pet.init(self, container, x, y)
+    Pet.init(self, container, x, y, {
+        payout = 2,
+    })
     self:addTag('chin')
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animEat = Animation(sprites.eat, 2, 10)
@@ -77,7 +79,7 @@ function PetChin:draw()
     Pet.draw(self)
     if self.tongueProgress > 0.01 then
         local pos = self:getPosition()
-        pos.x = pos.x + (self.faceRight and 1 or -1)
+        pos.x = pos.x + self.direction
         pos.y = pos.y + 1
         local delta = (self.tonguePos - pos) * self.tongueProgress
         love.graphics.draw(sprites.tongueBody, pos.x, pos.y, delta:angleTo(), delta:len() / 6, 1, 0, 3)

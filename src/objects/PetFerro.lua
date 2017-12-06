@@ -12,7 +12,14 @@ local SPRITE = love.graphics.newImage('res/img/pet/ferro.png')
 local sound = love.audio.newSource('res/sfx/ferro.wav')
 
 function PetFerro:init(container, x, y)
-    WanderingPet.init(self, container, x, y)
+    WanderingPet.init(self, container, x, y, {
+        payout = 3,
+        wanderSpeed = 1,
+        wanderDistanceMin = 80,
+        wanderDistanceMax = 80,
+        wanderDelayMin = 200,
+        wanderDelayMax = 300,
+    })
     self.anim = Animation(SPRITE, 2, 10)
     self:addTag('ferro')
 end
@@ -32,22 +39,6 @@ function PetFerro:collide(col, other, fixture)
         other:destroy()
         self:resetTime()
     end
-end
-
-function PetFerro:getWanderSpeed()
-    return 1
-end
-
-function PetFerro:getWanderDistance()
-    return 80
-end
-
-function PetFerro:getWanderDelay()
-    return math.random(200, 240)
-end
-
-function PetFerro:getPayout()
-    return 3
 end
 
 function PetFerro:getSound()

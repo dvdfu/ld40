@@ -19,7 +19,15 @@ local sprites = {
 local sound = love.audio.newSource('res/sfx/dasher.wav')
 
 function PetDasher:init(container, x, y)
-    WanderingPet.init(self, container, x, y)
+    WanderingPet.init(self, container, x, y, {
+        lavaImmune = true,
+        payout = 2,
+        wanderSpeed = 0.5,
+        wanderDistanceMin = 64,
+        wanderDistanceMax = 128,
+        wanderDelayMin = 200,
+        wanderDelayMax = 300,
+    })
     self.animIdle = Animation(sprites.idle, 2, 10)
     self.animHappy = Animation(sprites.happy, 2, 10)
     self.animSad = Animation(sprites.happy, 2, 10)
@@ -64,22 +72,6 @@ end
 function PetDasher:select()
     WanderingPet.select(self)
     self:resetTime()
-end
-
-function PetDasher:lavaImmune()
-    return true
-end
-
-function PetDasher:getWanderSpeed()
-    return 0.5
-end
-
-function PetDasher:getWanderDistance()
-    return math.random(64, 128)
-end
-
-function PetDasher:getWanderDelay()
-    return math.random(200, 300)
 end
 
 function PetDasher:getSound()

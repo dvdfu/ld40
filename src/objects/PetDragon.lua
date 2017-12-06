@@ -15,7 +15,10 @@ local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
 local sound = love.audio.newSource('res/sfx/dragon.wav')
 
 function PetDragon:init(container, x, y)
-    Pet.init(self, container, x, y)
+    Pet.init(self, container, x, y, {
+        fireballImmune = true,
+        payout = 2,
+    })
     self:addTag('dragon')
     self.anim = Animation(SPRITE, 2, 10)
     self.timer = Timer()
@@ -46,20 +49,12 @@ function PetDragon:collide(col, other, fixture)
     end
 end
 
-function PetDragon:fireballImmune()
-    return true
-end
-
 function PetDragon:breathFire()
-    local x = self.body:getX() + (self.faceRight and 8 or -8)
+    local x = self.body:getX() + self.direction * 8
     local y = self.body:getY() + 1
-    local fireball = Fireball(self.container, x, y, self.faceRight)
-    self.faceRight = not self.faceRight
+    local fireball = Fireball(self.container, x, y, self.direction)
+    self.direction = -self.direction
     self:squish()
-end
-
-function PetDragon:draw()
-    Pet.draw(self)
 end
 
 function PetDragon:getSound()
