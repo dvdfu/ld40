@@ -1,19 +1,14 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Lava = require 'src.objects.Lava'
-local WanderingPet = require 'src.objects.WanderingPet'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
+local WanderingPet = require 'src.objects.WanderingPet'
 
 local PetDasher = Class.new()
 PetDasher:include(WanderingPet)
 
 local SHAPE = love.physics.newCircleShape(6)
-
-local sprites = {
-    idle = love.graphics.newImage('res/img/pet/dasher.png'),
-    happy = love.graphics.newImage('res/img/pet/dasher_happy.png'),
-    sad = love.graphics.newImage('res/img/pet/dasher_sad.png'),
-}
 
 local sound = love.audio.newSource('res/sfx/dasher.wav')
 
@@ -30,9 +25,9 @@ function PetDasher:init(container, x, y)
         wanderDelayMax = 300,
     })
     self:addTag('dasher')
-    self.animIdle = Animation(sprites.idle, 2, 10)
-    self.animHappy = Animation(sprites.happy, 2, 10)
-    self.animSad = Animation(sprites.happy, 2, 10)
+    self.animIdle = Animation(Sprites.pet.dasher.IDLE, 2, 10)
+    self.animHappy = Animation(Sprites.pet.dasher.HAPPY, 2, 10)
+    self.animSad = Animation(Sprites.pet.dasher.SAD, 2, 10)
     self.anim = self.animIdle
     self.lavaSpawnTimer = Timer()
     self.lavaSpawnTimer:every(20, function()

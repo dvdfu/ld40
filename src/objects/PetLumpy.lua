@@ -1,6 +1,7 @@
 local Animation = require 'src.Animation'
 local Apple = require 'src.objects.Apple'
 local Class = require 'modules.hump.class'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 local WanderingPet = require 'src.objects.WanderingPet'
 
@@ -9,11 +10,6 @@ PetLumpy:include(WanderingPet)
 
 local SHAPE = love.physics.newCircleShape(6)
 local SENSOR_SHAPE = love.physics.newCircleShape(10)
-
-local sprites = {
-    idle = love.graphics.newImage('res/img/pet/lumpy.png'),
-    scared = love.graphics.newImage('res/img/pet/lumpy_scared.png'),
-}
 
 local sound = love.audio.newSource('res/sfx/lumpy.wav')
 
@@ -31,8 +27,8 @@ function PetLumpy:init(container, x, y)
         wanderDelayMin = 90,
         wanderDelayMax = 150,
     })
-    self.animIdle = Animation(sprites.idle, 2, 10)
-    self.animScared = Animation(sprites.scared, 2, 5)
+    self.animIdle = Animation(Sprites.pet.lumpy.IDLE, 2, 10)
+    self.animScared = Animation(Sprites.pet.lumpy.SCARED, 2, 5)
     self.anim = self.animIdle
     self.scared = false
     self.scaredTimer = Timer()

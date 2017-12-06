@@ -1,8 +1,9 @@
 local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Pet = require 'src.objects.Pet'
-local Vector = require 'modules.hump.vector'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
+local Vector = require 'modules.hump.vector'
 
 local PetChin = Class.new()
 PetChin:include(Pet)
@@ -10,13 +11,6 @@ PetChin:include(Pet)
 local SHAPE = love.physics.newCircleShape(6)
 local SNAG_LENGTH = 32
 local SNAG_SHAPE = love.physics.newCircleShape(SNAG_LENGTH)
-
-local sprites = {
-    idle = love.graphics.newImage('res/img/pet/chin.png'),
-    eat = love.graphics.newImage('res/img/pet/chin_eat.png'),
-    tongueBody = love.graphics.newImage('res/img/tongue_body.png'),
-    tongueTip = love.graphics.newImage('res/img/tongue_tip.png'),
-}
 
 local sound = love.audio.newSource('res/sfx/chin.wav')
 
@@ -27,8 +21,8 @@ function PetChin:init(container, x, y)
         sound = sound,
     })
     self:addTag('chin')
-    self.animIdle = Animation(sprites.idle, 2, 10)
-    self.animEat = Animation(sprites.eat, 2, 10)
+    self.animIdle = Animation(Sprites.pet.chin.IDLE, 2, 10)
+    self.animEat = Animation(Sprites.pet.chin.HAPPY, 2, 10)
     self.anim = self.animIdle
     self.tonguePos = Vector(x, y)
     self.tongueProgress = 0
@@ -75,8 +69,8 @@ function PetChin:draw()
         pos.x = pos.x + self.direction
         pos.y = pos.y + 1
         local delta = (self.tonguePos - pos) * self.tongueProgress
-        love.graphics.draw(sprites.tongueBody, pos.x, pos.y, delta:angleTo(), delta:len() / 6, 1, 0, 3)
-        love.graphics.draw(sprites.tongueTip, pos.x + delta.x, pos.y + delta.y, 0, 1, 1, 3, 3)
+        love.graphics.draw(Sprites.pet.chin.TONGUE_BODY, pos.x, pos.y, delta:angleTo(), delta:len() / 6, 1, 0, 3)
+        love.graphics.draw(Sprites.pet.chin.TONGUE_TIP, pos.x + delta.x, pos.y + delta.y, 0, 1, 1, 3, 3)
     end
 end
 

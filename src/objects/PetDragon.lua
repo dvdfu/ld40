@@ -2,6 +2,7 @@ local Animation = require 'src.Animation'
 local Class = require 'modules.hump.class'
 local Fireball = require 'src.objects.Fireball'
 local Pet = require 'src.objects.Pet'
+local Sprites = require 'src.Sprites'
 local Timer = require 'modules.hump.timer'
 
 local PetDragon = Class.new()
@@ -9,7 +10,6 @@ PetDragon:include(Pet)
 
 local FIREBALL_INTERVAL = 240
 local SHAPE = love.physics.newCircleShape(6)
-local SPRITE = love.graphics.newImage('res/img/pet/dragon.png')
 
 local sound = love.audio.newSource('res/sfx/dragon.wav')
 
@@ -21,7 +21,7 @@ function PetDragon:init(container, x, y)
         sound = sound,
     })
     self:addTag('dragon')
-    self.anim = Animation(SPRITE, 2, 10)
+    self.anim = Animation(Sprites.pet.dragon.IDLE, 2, 10)
     self.fireballSpawnTimer = Timer()
     self.fireballSpawnTimer:every(FIREBALL_INTERVAL, function()
         self:breathFire()
