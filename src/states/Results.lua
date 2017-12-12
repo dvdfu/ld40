@@ -54,7 +54,7 @@ function Results:draw()
     local seconds = math.ceil(self.stats.time / 60)
     local minutes = math.floor(seconds / 60)
     seconds = seconds % 60
-    local time = minutes .. ':' .. seconds .. (seconds < 10 and '0' or '')
+    local time = minutes .. ':' .. (seconds < 10 and '0' or '') .. seconds
     love.graphics.print(time, x + 16, y - 1)
 end
 
